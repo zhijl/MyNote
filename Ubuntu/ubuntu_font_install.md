@@ -3,6 +3,7 @@ Ubuntu默认字体为Ubuntu Regular
 
 ### 查看系统字体
 Unity Tweak Tool查看字体
+
 ![Unity Tweak Tool查看字体](/_Resource/ubuntu_font_install_01.png)
 
 ### 安装字体
