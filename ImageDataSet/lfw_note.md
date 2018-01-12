@@ -16,7 +16,17 @@ LFW数据集主要测试人脸识别的准确率，该数据库从中随机选�
 * 5749 people
 * 1680 people with two or more images
 
+数据集截图：
+
+![lfw数据集截图](/_Resource/lfw_01.png)
+
+lfw文件夹截图（每个子文件夹用名字命名）：
+
+![lfw数据集截图](/_Resource/lfw_02.png)
+
 ## LFW 数据处理流程
+
+LFW 数据集中的图片一般经过如下处理过程：
 
 * 人脸检测(Viola-jones人脸检测器+人工矫正)
 
@@ -27,6 +37,8 @@ LFW数据集主要测试人脸识别的准确率，该数据库从中随机选�
 * 裁切与尺寸归一化(人脸框放大2.2倍，黑色填充，再resize到250×250)
 
 * 组建训练测试集合
+
+---
 
 ## LFW 数据集获取
 
@@ -65,6 +77,8 @@ http://vis-www.cs.umass.edu/lfw/peoplesDevTrain.txt
 9. peopleDevTest.txt
 
 http://vis-www.cs.umass.edu/lfw/pairsDevTest.txt
+
+---
 
 ## LFW 数据集使用说明
 
@@ -177,10 +191,31 @@ George_W_Bush 530
 
 后面依次重复9次，表示其他9组的数据信息。
 
+---
+
 ## 结果评测指标
 
 * 准确率
+
+准确率即正确分类正确的次数占总分类次数的比率。
+
 * ROC曲线
+
+ROC，即 receiver operating characteristic，在逻辑回归里面，我们会设一个阈值，大于这个值的为正类，小于这个值为负类。如果我们减小这个阀值，那么更多的样本会被识别为正类。这会提高正类的识别率，但同时也会使得更多的负类被错误识别为正类。为了形象化这一变化，在此引入 ROC ，ROC 曲线可以用于评价一个分类器好坏。
+
+ROC关注两个指标，
+
+$$
+TPR=\dfrac{TP}{TP+FN}
+$$
+
+$$
+FPR=\dfrac{FP}{FP+TN} 
+$$
+
+$TPR$ 代表能将正例分对的概率，$FPR$ 代表将负例错分为正例的概率。在 $ROC$ 空间中，每个点的横坐标是 $FPR$，纵坐标是 $TPR$，这也就描绘了分类器在 $TP$（真正率）和 $FP$（假正率）间的权衡。
+
+---
 
 ## 总结和评价
 
