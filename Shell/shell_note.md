@@ -186,14 +186,171 @@ echo "$3"
 
 ## Shell 运算符
 
+原生bash不支持简单的数学运算，但是可以通过其他命令来实现，例如 awk 和 expr，expr 最常用
 
-## Shell echo 命令
+- expr 是一款表达式计算工具，使用它能完成表达式的求值操作
+
+``` shell
+a=2
+val=`exp $a + 3`
+echo "$val"
+```
+
+> 表达式和运算符之间要有空格，例如 2+2 是不对的，必须写成 2 + 2
+> 完整的表达式要被反引号 ` ` 包含
+
+- 算术运算示例
+
+``` shell
+#!/bin/bash
+a=10
+b=20
+
+val=`expr $a + $b`
+echo "a + b : $val"
+
+val=`expr $a - $b`
+echo "a - b : $val"
+
+val=`expr $a \* $b`
+echo "a * b : $val"
+
+val=`expr $b / $a`
+echo "b / a : $val"
+
+val=`expr $b % $a`
+echo "b % a : $val"
+
+if [ $a == $b ]
+then
+   echo "a 等于 b"
+fi
+if [ $a != $b ]
+then
+   echo "a 不等于 b"
+fi
+```
+
+> - 乘号(*)前边必须加反斜杠(\)才能实现乘法运算
+> -  MAC 中 shell 的 expr 语法是：$((表达式))，此处表达式中的乘号 "*" 不需要转义符号 "\"
+
+- 关系运算符示例
+
+关系运算符只支持数字，不支持字符串，除非字符串的值是数字
+
+| 运算符   |  说明      | 举例      |
+| :------- | :-------- | :-------- |
+| -eq      | 检测两个数是否相等，相等返回 true                 | ` [ $a -eq $b ] ` 返回 false |
+| -eq      | 检测两个数是否相等，相等返回 true                 | ` [ $a -eq $b ] ` 返回 false |
+| -ne      | 检测两个数是否相等，不相等返回 true               | ` [ $a -ne $b ] ` 返回 true  |
+| -gt      | 检测左边的数是否大于右边的，如果是，则返回 true    | ` [ $a -gt $b ] ` 返回 false  |
+| -lt      | 检测左边的数是否小于右边的，如果是，则返回 true    | ` [ $a -lt $b ] ` 返回 true   |
+| -ge      | 检测左边的数是否大于等于右边的，如果是，则返回 true | ` [ $a -ge $b ] ` 返回 false |
+| -le      | 检测左边的数是否小于等于右边的，如果是，则返回 true | ` [ $a -le $b ] ` 返回 true  |
+
+- 布尔运算符
+
+| 运算符   | 说明 | 举例 |
+| :------- | :-------- | :-------- |
+| !        | 非运算，表达式为 true 则返回 false，否则返回 true | ` ! false ] ` 返回 true |
+| -o       | 或运算，有一个表达式为 true 则返回 true | ` $a -lt 20 -o $b -gt 100 ] ` 返回 true |
+| -a       | 与运算，两个表达式都为 true 才返回 true | ` $a -lt 20 -a $b -gt 100 ] ` 返回 false |
+
+- 逻辑运算符
 
 
-## Shell printf 命令
+| 运算符 | 说明 | 举例 |
+| :------- | :-------- | :-------- |
+| `&&` | 逻辑的 AND | ` [[ $a -lt 100 && $b -gt 100 ]] ` 返回 false |
+| `||` | 逻辑的 OR  | ` [[ $a -lt 100 || $b -gt 100 ]] ` 返回 true  |
 
+- 字符串运算符
 
-## Shell test 命令
+| 运算符 | 说明 | 举例 |
+| :------- | :-------- | :-------- |
+| =	检测两个字符串是否相等，相等返回 true | `[ $a = $b ]` 返回 false |
+| != | 检测两个字符串是否相等，不相等返回 true | `[ $a != $b ]` 返回 true |
+| -z | 检测字符串长度是否为0，为0返回 true | `[ -z $a ]` 返回 false |
+| -n | 检测字符串长度是否为0，不为0返回 true | `[ -n $a ]` 返回 true |
+| str | 检测字符串是否为空，不为空返回 true | `[ $a ]` 返回 true |
+
+- 文件测试运算符
+
+| 操作符 | 说明 | 举例 |
+| :------- | :-------- | :-------- |
+| -b file | 检测文件是否是块设备文件，如果是，则返回 true |	[ -b $file ] 返回 false | 
+| -c file | 检测文件是否是字符设备文件，如果是，则返回 true | [ -c $file ] 返回 false | 
+| -d file | 检测文件是否是目录，如果是，则返回 true | [ -d $file ] 返回 false | 
+| -f file | 检测文件是否是普通文件（既不是目录，也不是设备文件），如果是，则返回 true | [ -f $file ] 返回 true | 
+| -g file | 检测文件是否设置了 SGID 位，如果是，则返回 true | [ -g $file ] 返回 false | 
+| -k file | 检测文件是否设置了粘着位(Sticky Bit)，如果是，则返回 true | [ -k $file ] 返回 false | 
+| -p file | 检测文件是否是有名管道，如果是，则返回 true | [ -p $file ] 返回 false | 
+| -u file | 检测文件是否设置了 SUID 位，如果是，则返回 true | [ -u $file ] 返回 false | 
+| -r file | 检测文件是否可读，如果是，则返回 true | [ -r $file ] 返回 true | 
+| -w file | 检测文件是否可写，如果是，则返回 true | [ -w $file ] 返回 true | 
+| -x file | 检测文件是否可执行，如果是，则返回 true | [ -x $file ] 返回 true | 
+| -s file | 检测文件是否为空（文件大小是否大于0），不为空返回 true | [ -s $file ] 返回 true | 
+| -e file | 检测文件（包括目录）是否存在，如果是，则返回 true | [ -e $file ] 返回 true | 
+
+## Shell 基础命令
+
+- echo 回显字符串
+
+``` shell
+echo "this is a string!\n"
+echo this is a stiring!\n  # 引号可以去掉
+echo -e "OK! \c" # -e 开启转移 \c 不换行
+echo "this is a test" > file_name # 将字符串内容重定向到文件
+echo `data` # 显示命令执行结果
+```
+- read 读字符串
+
+从终端读取字符串
+
+``` shell
+read name
+echo "$name"
+```
+
+- printf 命令
+
+printf 命令模仿 C 程序库（library）里的 printf() 程序，移植性比echo好
+
+``` shell
+# 单引号与双引号效果一样 
+printf '%d %s\n' 1 "abc" 
+
+# 没有引号也可以输出
+printf %s abcdef
+
+# 格式只指定了一个参数，但多出的参数仍然会按照该格式输出，format-string 被重用
+printf %s abc def
+
+printf "%s\n" abc def
+
+printf "%s %s %s\n" a b c d e f g h i j
+
+# 如果没有 arguments，那么 %s 用NULL代替，%d 用 0 代替
+printf "%s and %d \n" 
+```
+
+转义字符：
+| 字符 | 说明 |
+| :------- | :-------- |
+| \a   | 警告字符，通常为ASCII的BEL字符 |
+| \b   | 后退 |
+| \c   | 抑制（不显示）输出结果中任何结尾的换行字符（只在%b格式指示符控制下的参数字符串中有效），而且，任何留在参数里的字符、任何接下来的参数以及任何留在格式字符串中的字符，都被忽略 |
+| \f   | 换页（formfeed）
+| \n   | 换行 |
+| \r   | 回车（Carriage return） |
+| \t   | 水平制表符 |
+| \v   | 垂直制表符 |
+| \\   | 一个字面上的反斜杠字符 |
+| \ddd   | 表示1到3位数八进制值的字符。仅在格式字符串中有效 |
+| \0ddd   | 表示1到3位的八进制值字符 |
+
+- test 命令
+
 
 
 ## Shell 流程控制
@@ -213,3 +370,4 @@ echo "$3"
 [Shell 教程](http://www.runoob.com/linux/linux-shell.html)
 
 
+2018年1月15日 00:22:27
