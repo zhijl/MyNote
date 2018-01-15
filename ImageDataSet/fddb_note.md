@@ -109,7 +109,7 @@ detection_score —— 检测分数
 匹配度计算公式如下：
 
 $$
-S(d_i, l_j) = \dfrac{area(d_i) \cap area(l_i)}{area(d_i) \cap area(l_i)}
+S(d_i, l_j) = \dfrac{area(d_i) \cap area(l_i)} {area(l_i)}
 $$
 
 这里$area(d_i)$表示检测第i张被检测到的人脸区域，$area(l_i)$表示第i张对应的人脸标注区域。
