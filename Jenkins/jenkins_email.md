@@ -1,11 +1,13 @@
 # Jenkins 邮箱配置
 
+本文针对 Jenkins 2.89.3
+
 ## 配置方法
 
 可参考[1], 具体为
-主要在 Jenkins 的 Manage Jenkins -> Configure System 中进行设置, 修改项为
+在 Jenkins 的 Manage Jenkins -> Configure System 中进行设置, 修改项为
 
-- **Jenkins Location** 中的 `System Admin e-mail address` 修改为你想设定的默认发送方邮箱账号:如123@qq.com
+- **Jenkins Location** 中的 `System Admin e-mail address` 修改为你想设定的默认发送方邮箱账号: 如123@qq.com
 - **E-mail Notification** 中的
   - `SMTP server` 设置为邮箱SMTP服务器域名, 如 `smtp.qq.com`
   - `Default user e-mail suffix` 设置为邮箱后缀, 如 `@qq.com`
