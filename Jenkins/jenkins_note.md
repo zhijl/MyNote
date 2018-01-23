@@ -52,4 +52,4 @@ web 端访问界面提示需要输入 /home/zhi/.jenkins/secrets/initialAdminPas
 
 [Meet Jenkins](https://wiki.jenkins.io/display/JENKINS/Meet+Jenkins)
 
-[基于DOCKER的CI工具—DRONE]https://imnerd.org/drone.html
+[基于DOCKER的CI工具—DRONE](https://imnerd.org/drone.html)
