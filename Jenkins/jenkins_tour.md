@@ -96,7 +96,7 @@ pipeline {
 }
 ```
 
-## `pipeline` 中的多元环节 `steps`
+## pipeline 中的多元环节 steps
 
 `pipeline` 中设有一种多元环节的规则, `pipeline` 中的多元环节 `steps` 实现了项目中的编译、测试和应用部署流程. Jenkins Pipeline 以一种简单的方式组织多元环节, 辅助自动化流程的模型建模.
 
@@ -106,7 +106,7 @@ pipeline {
 
 实例如下
 
-### 针对 Linux/BSD 和 Mac OS 的 `steps` 示例
+### 针对 Linux/BSD 和 Mac OS 的 steps 示例
 
 在类 Unix 平台, 使用 `sh` step 命令实现在 `pipeline` 中定义一个shell语句.
 
@@ -127,7 +127,7 @@ pipeline {
 }
 ```
 
-### Windows 中的 `steps` 示例
+### Windows 中的 steps 示例
 
 在 Windows 平台, 应该使用 `bat` step 命令来实现在 `pipeline` 中定义一个批处理语句.
 
@@ -144,7 +144,7 @@ pipeline {
 }
 ```
 
-### `steps` 中的 timeout/retry 示例
+### steps 中的 timeout/retry 示例
 
 这里也有一些已经封装过的 `steps`命令, 比如 `retry` 命令, 适用于一些需要对程序再次执行直到成功执行的情景, 同时通过 `timeout` 命令来约束某些语句的执行的时间.
 
@@ -225,7 +225,7 @@ pipeline {
 }
 ```
 
-## `pipeline` 中的执行环境
+## pipeline 中的执行环境
 
 `pipeline` 中的 `agent` 将告诉 Jenkins 在怎样的环境执行该 `pipeline` 或者 `pipeline` 中的一部分过程. 而 `agent` 在每个 `pipeline` 中都是必须声明的.
 
@@ -270,7 +270,7 @@ v7.4.0
 
 `pipline` 中可以很容易地融合多个容器或者不同的 `agent`, 而关于其中更多的设置, 可以参考下面一节, 使用环境变量.
 
-## `pipeline` 中的环境变量
+## pipeline 中的环境变量
 
 环境变量可以设为全局的也可以时局部的针对某一个 `stage` 的.
 
@@ -326,7 +326,7 @@ environment {
 
 在下面一节, 我们介绍另一个重要的持续部署概念: 信息反馈
 
-## `pipeline` 中的过程信息记录
+## pipeline 中的过程信息记录
 
 这里指的过程信息, 包括编译、测试等阶段的中间日志输出, 其中较为关注的时测试结果信息的收集. 
 
@@ -356,7 +356,7 @@ pipeline {
 
 在上面这个例子中, Jenkins 将会抓取测试结果追溯有用的信息, 整理并形成报告. 如果一个 `pipeline` 中的测试项有部分是失败的, 那该 `pipeline` 将被标记为 `UNSTABLE`, 在 Web UI 界面中将以黄色标注显现. 这区别于 `pipeline` 失败时, 用红色进行标注.
 
-## `pipeline` 中的清理和消息提醒
+## pipeline 中的清理和消息提醒
 
 这一节继续上面的 `post` 节点, `post` 作为 `pipeline` 最后一个阶段被执行, 我们可以在其中加入一些消息提示或者完成一些清理工作.
 
@@ -409,7 +409,7 @@ post {
 
 上面的示例中, 在 `pipeline` 构建失败的时候, 将按特定格式给制定电子邮箱发送电子邮件.
 
-## `pipeline` 中的持续部署
+## pipeline 中的持续部署
 
 一般持续部署框架都会有这三个阶段: 编译, 测试, 部署. 在这一节中我们将介绍的是部署阶段. 这一阶段需要基于稳定或成功的编译和测试.
 
@@ -458,7 +458,7 @@ stage('Deploy - Production') {
 
 在这个例子体现的是, 无论我们后面要通过 run-smoke-tests 脚本进行怎样的冒烟测试, 在正式部署到产品线上时, 都要先通过一次质量检测, 才能正式上线. 整个 `pipeline` 都是全自动的, 但是有时我们想人为地在发行前做一次确认, 这是就需要程序自动发起请求, 寻求确认.
 
-### `pipeline` 处理过程中的人为确认
+### pipeline 处理过程中的人为确认
 
 一般在部署阶段我们想要人为进行确认, 者只需在我们想要重点关注的阶段前加入一个 `input` step, 则 `pipeline` 运行到此将发起请求, 待人确认后再继续进行.
 
