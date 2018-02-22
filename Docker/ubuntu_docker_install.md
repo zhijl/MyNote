@@ -91,7 +91,19 @@ http://hub-mirror.c.163.com
 
 ``` json
 {
-  "registry-mirrors": ["http://hub-mirror.c.163.com"]
+    "registry-mirrors": [
+        "http://hub-mirror.c.163.com"
+    ]
+}
+```
+
+或者使用 docker 官方镜像地址：
+
+``` json
+{
+    "registry-mirrors": [
+        "https://registry.docker-cn.com"
+    ]
 }
 ```
 
