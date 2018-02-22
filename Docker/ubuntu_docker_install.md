@@ -81,7 +81,7 @@ sudo service docker start
 
 ## 镜像加速
 
-国内网络问题，后续拉取 Docker 镜像十分缓慢，我们可以需要配置加速器来解决，我使用的是网易的镜像地址：
+国内网络问题，后续拉取 Docker 镜像十分缓慢，可以配置加速器来解决，例如网易的镜像地址：
 
 ``` text
 http://hub-mirror.c.163.com
