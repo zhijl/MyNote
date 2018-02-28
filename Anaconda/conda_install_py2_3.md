@@ -6,10 +6,12 @@
 
 ## conda 常用命令
 
-* 查看当前系统下环境
+* 查看当前系统下已有环境
 
-```
+``` shell
 conda info -e
+# 或
+conda info --envs
 ```
 
 * 例子
