@@ -1,5 +1,7 @@
 ## Caffe 安装指南
 
+下面安装过程中 `prefix` 为安装路径
+
 ### 下载源码
 从GitHub上获取源码，可以使用Git或者wget
 ```
@@ -141,13 +143,14 @@ https://github.com/google/leveldb/releases
 
 ### 配置环境变量
 
-将export PATH=~/mydev/bin/:$PATH加入到~/.bashrc中
-```
+将`export PATH=~/mydev/bin/:$PATH`加入到`~/.bashrc`中
+
+``` shell
 > source ~/.bashrc
 # 让修改生效
 ```
 
-### 根据需求修改Makefile.config文件
+### 根据需求修改 Makefile.config 文件
 
 修改完成后，进行编译
 
@@ -157,19 +160,24 @@ make distribute
 ```
 
 ### 仍然遇到的问题
-```
+
+``` shell
 > make pycaffe
 python/caffe/_caffe.cpp:1:52: fatal error: Python.h: No such file or directory
 ```
+
 解决——注意配置文件中的anaconda应该为anaconda2
-```
+
+``` shell
  72 ANACONDA_HOME := $(HOME)/anaconda2
  73 PYTHON_INCLUDE := $(ANACONDA_HOME)/include \
  74         $(ANACONDA_HOME)/include/python2.7 \
  75         $(ANACONDA_HOME)/lib/python2.7/site-packages/numpy/core/include
 ```
-OpenBlas的问题
-```
+
+OpenBlas的问题:
+
+``` shell
 CXX/LD -o .build_release/tools/upgrade_solver_proto_text.bin
 .build_release/lib/libcaffe.so: undefined reference to `cblas_ddot'
 .build_release/lib/libcaffe.so: undefined reference to `cblas_daxpy'
@@ -189,15 +197,18 @@ collect2: error: ld returned 1 exit status
 Makefile:625: recipe for target '.build_release/tools/upgrade_solver_proto_text.bin' failed
 make: *** [.build_release/tools/upgrade_solver_proto_text.bin] Error 1
 ```
-解决——手动在Makefile中的LDFLAGS += 处加上 -lopenblas
+
+解决——手动在 Makefile 中的 `LDFLAGS +=` 处加上 `-lopenblas`
 
 启用OpenBlas加速
-```
+
+``` shell
 export OPENBLAS_NUM_THREADS=4
 ```
 
 测试
-```
+
+``` shell
 export LD_LIBRARY_PATH=/home/zhi/mydev/lib:$LD_LIBRARY_PATH
 make test -j4
 make runtest
@@ -205,4 +216,3 @@ make runtest
 
 2017年11月23日21:16:35
 2017年12月26日22:32:20 update
-
