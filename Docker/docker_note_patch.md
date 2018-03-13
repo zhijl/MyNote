@@ -24,6 +24,14 @@ docker version
 sudo reboot
 ```
 
+## 使用 `docker exec -it` 命令进入容器
+
+例如：
+
+``` shell
+docker exec -it name /bin/bash
+```
+
 ## 参考
 
 [1] [Docker学习笔记之一，搭建一个JAVA Tomcat运行环境](http://www.blogjava.net/yongboy/archive/2013/12/12/407498.html)
