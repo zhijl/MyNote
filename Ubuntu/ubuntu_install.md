@@ -34,6 +34,12 @@ ubuntu-16.04.3-desktop-amd64.iso
 1. 挂载`swap`；逻辑分区；充当虚拟内存；大小等于内存大小（2G）；分区格式为swap；
 1. 挂载`/boot`；引导分区；逻辑分区；大小为200M；分区格式为ext4
 
+## 问题
+
+分区完成后点击继续出现：the partition table format in use on your disks normally requires you to create a separate partition for boot loader code. this partition should de marked for use as a "reserved bios boot area" and should de at least 1 mb in size. note that this is not same as a partition mounted in /boot.
+
+解决方法：新建一个分区，分至少1MB，设置为biogrup，用于EFI保留分区
+
 ## 参考
 
 [Ubuntu分区方案（菜鸟方案、常用方案和进阶方案）](http://blog.csdn.net/alvern_zhang/article/details/48392895)
