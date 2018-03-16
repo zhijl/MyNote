@@ -37,5 +37,5 @@ conda install keras
 
 ## 参考
 
-[1] [在不同版本python下安装tensorflow](http://blog.csdn.net/silence2015/article/details/73777071)
-[2] [TensorFlow中文社区](http://www.tensorfly.cn/tfdoc/get_started/os_setup.html)
+1. [在不同版本python下安装tensorflow](http://blog.csdn.net/silence2015/article/details/73777071)
+1. [TensorFlow中文社区](http://www.tensorfly.cn/tfdoc/get_started/os_setup.html)
