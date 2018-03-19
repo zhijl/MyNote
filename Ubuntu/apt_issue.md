@@ -1,6 +1,6 @@
-# Ubuntu apt 获取资源的时候可能导致的问题
+## Ubuntu apt 获取资源的时候可能导致的问题
 
-执行sudo apt install时提示/var/lib/dpkg/lock
+执行 `sudo apt install` 时提示 `/var/lib/dpkg/lock`
 
 分析原因:
 
@@ -11,4 +11,3 @@
 sudo rm /var/cache/apt/archives/lock
 sudo rm /var/lib/dpkg/lock
 ```
-
