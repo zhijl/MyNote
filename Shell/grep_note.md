@@ -10,3 +10,8 @@
 grep -rin "hello" /home/test
 ```
 
+一个复杂的例子，目标是从Jenkins系统目录下取得所有代理节点的标签名
+
+``` shell
+cd /var/jenkins_home/nodes/ && grep -rn "<label>" | awk '{print $2}' | awk -v FS="<label>" -v OPS=" " '{print $2}' | awk -v FS="</label>" -v OFS=" " '{print $1}' | tr "\n" " " | awk -v OFS="\\\n" '{$1=$1; print}'
+```
