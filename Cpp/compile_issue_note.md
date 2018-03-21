@@ -14,6 +14,18 @@ arm-linux-gnueabihf-gcc: error while loading shared libraries: libstdc++.so.6: c
 sudo apt-get install lib32stdc++6
 ```
 
+#### 交叉编译中遇到的 PIE 问题
+
+问题日志
+
+``` text
+error: only position independent executables <PIE> are supported.
+```
+
+解决：
+
+编译和链接时加上参数 `-pie -fPIE`
+
 #### 参考
 
 1. [error while loading libstdc++.so.6](https://jingyan.baidu.com/article/cdddd41c820b5d53cb00e100.html)
