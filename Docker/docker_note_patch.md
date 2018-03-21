@@ -9,6 +9,14 @@ docker run            # 后面通常用到的参数
 --mount source=A,target=B     # 容器内将外部环境中的A目录挂载在容器内的B目录上
 ```
 
+## 构建镜像
+
+``` shell
+docker build
+-t my_docker_name:version_num        # 制定镜像名
+<Dockerfile 路径>
+```
+
 ## Docker 去除 sudo
 
 ``` shell
@@ -31,6 +39,8 @@ sudo reboot
 ``` shell
 docker exec -it name /bin/bash
 ```
+
+也可以通过 touch 参数进行入容器终端，但这种方式不好，不常用，在此不说明
 
 ## 参考
 
