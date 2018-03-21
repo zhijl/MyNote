@@ -69,7 +69,7 @@ WARNING: Adding a user to the "docker" group will grant the ability to run
          for more information.
 ```
 
-后面提示说要以非root用户直接执行 Docker 时,需执行  `sudo usermod -aG docker zhi` 语句,然后在重新登录
+后面提示说要以非root用户直接执行 Docker 时,需执行  `sudo usermod -aG docker zhi` 语句,然后再重新登录
 
 注: 这种安装的方式比较耗时,且安装过程不透明
 
