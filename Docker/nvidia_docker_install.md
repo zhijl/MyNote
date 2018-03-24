@@ -23,3 +23,7 @@ sudo dpkg -i /tmp/nvidia-docker*.deb && rm /tmp/nvidia-docker*.deb
 
 sudo nvidia-docker run --rm nvidia/cuda nvidia-smi
 ```
+
+#### 参考
+
+1. [Docker - 基于NVIDIA-Docker的Caffe-GPU环境搭建](http://blog.csdn.net/zziahgf/article/details/72578273)
