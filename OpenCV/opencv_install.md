@@ -38,6 +38,10 @@ sudo apt install python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-d
 - 设置编译文档存放路径：`BUILD_DOCS`
 - 设置编译样例：`BUILD_EXAMPLES`
 
+编译静态库可加上下面这个参数
+
+- -DBUILD_SHARED_LIBS=OFF
+
 [更多参考][1]
 
 ## Make 执行编译
