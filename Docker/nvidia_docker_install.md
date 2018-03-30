@@ -8,7 +8,7 @@ Docker >= 1.9 (official docker-engine, docker-ce or docker-ee only)
 NVIDIA GPU with Architecture > Fermi (2.1) 
 NVIDIA drivers >= 340.29 with binary nvidia-modprobe (驱动版本与CUDA计算能力相关)
 
-CUDA与NVIDIA driver需预先安装好
+CUDA 与 NVIDIA driver需预先安装好
 ```
 
 #### NVIDIA-Docker 安装
