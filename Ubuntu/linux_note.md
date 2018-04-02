@@ -21,3 +21,9 @@ env
 ``` shell
 export
 ```
+
+wget从ftp下载
+
+``` shell
+wget ftp://ip:port/software/os/ubuntu12.04/ubuntu-12.04.1-server-amd64.iso --ftp-user=username --ftp-password=password
+```
