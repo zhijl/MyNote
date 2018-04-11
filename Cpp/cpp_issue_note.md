@@ -8,7 +8,7 @@
 
 程序链接时出现未定义的 `omp_*` 一系列标识符，如果使用的时 GCC 编译器，解决方式是链接时加上 `-fopenmp` 启动 OpenMP 即可
 
-> 参考 
+> 参考
 
 https://stackoverflow.com/questions/22989766/libopencl-so-uses-vfp-register-arguments-output-does-not#
 
