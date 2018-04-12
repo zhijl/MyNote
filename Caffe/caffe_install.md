@@ -141,6 +141,19 @@ https://github.com/google/leveldb/releases
 > make install
 ```
 
+### LMDB 安装和配置
+
+1. 下载和解压
+
+https://github.com/LMDB/lmdb/releases
+
+2. 编译和安装
+
+```
+> make
+> make install -e prefix=/home/zhi/mydev
+```
+
 ### 配置环境变量
 
 将`export PATH=~/mydev/bin/:$PATH`加入到`~/.bashrc`中
