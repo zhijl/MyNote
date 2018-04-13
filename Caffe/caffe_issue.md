@@ -1,6 +1,6 @@
 # Caffe 问题总结
 
-## 找不够内置层
+## 找不到内置层
 
 - 问题日志
 
@@ -14,7 +14,7 @@ F0411 09:37:03.688216 30007 layer_factory.hpp:81] Check failed: registry.count(t
 
 > 参考：https://stackoverflow.com/questions/30325108/caffe-layer-creation-failure#
 
-## 卷积层中的 CuDnn 问题
+## 卷积层中的 CUDNN 问题
 
 - 问题日志
 
