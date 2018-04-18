@@ -63,6 +63,12 @@ docker exec -it name /bin/bash
 
 也可以通过 touch 参数进行入容器终端，但这种方式不好，不常用，在此不说明
 
+## Ubuntu 中 Docker 容器 Volume 路径
+
+```
+/var/lib/docker/volumes
+```
+
 ## 参考
 
 1. [Docker学习笔记之一，搭建一个JAVA Tomcat运行环境](http://www.blogjava.net/yongboy/archive/2013/12/12/407498.html)
