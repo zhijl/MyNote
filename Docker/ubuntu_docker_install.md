@@ -107,4 +107,15 @@ http://hub-mirror.c.163.com
 }
 ```
 
+或者尝试使用国内的 DaoCloud 进行加速：
+
+``` json
+{
+    "registry-mirrors": [
+         "http://489ca083.m.daocloud.io"
+    ]
+}
+
+```
+
 [Ubuntu Docker 安装](http://www.runoob.com/docker/ubuntu-docker-install.html)
