@@ -44,3 +44,9 @@ git push origin --delete branch_name
 ``` shell
 git branch -d branch_name
 ```
+
+### Git 拉取远程分支到本地
+
+``` shell
+git branch origin remote_branch_nameA:loacl_branch_nameA
+```
