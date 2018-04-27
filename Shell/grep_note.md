@@ -15,3 +15,15 @@ grep -rin "hello" /home/test
 ``` shell
 cd /var/jenkins_home/nodes/ && grep -rn "<label>" | awk '{print $2}' | awk -v FS="<label>" -v OPS=" " '{print $2}' | awk -v FS="</label>" -v OFS=" " '{print $1}' | tr "\n" " " | awk -v OFS="\\\n" '{$1=$1; print}'
 ```
+
+### grep 匹配多个条件
+
+``` shell
+egrep  -i '^(From | Subject | Date): ' maixbox
+
+out:
+
+From:wsj@qq.com
+Subject:We want you
+Date:Mon,21 Sep 2017 11:20:10
+```
