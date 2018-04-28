@@ -26,6 +26,18 @@ index-url = http://pypi.douban.com/simple
 trusted-host=pypi.douban.com
 ```
 
+#### pip install 指定版本
+
+```
+pip install tensorflow==1.3 tensorflow-gpu==1.3 -i https://pypi.tuna.tsinghua.edu.cn/simple/  # 采用国内源下载
+```
+
+而 conda 下载制定版本为
+
+```
+conda install tensorflow=1.3 tensorflow-gpu=1.3
+```
+
 #### 参考
 
 1. [修改pip安装源加快python模块安装](http://blog.csdn.net/u012592062/article/details/51966649)
