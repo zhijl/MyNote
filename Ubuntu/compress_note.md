@@ -15,13 +15,13 @@ tar -xzvf /path/to/file.tar.gz /path/to
 - 加密压缩
 
 ``` shell
-tar -czvf - file | openssl des3 -salt -k input_password -out /path/to/file.tar.gz
+tar -zcvf - file | openssl des3 -salt -k input_password -out /path/to/file.tar.gz
 ```
 
 - 加密解压
 
 ``` shell
-openssl des3 -d -k input_password -salt -in /path/to/file.tar.gz | tar xzf -
+openssl des3 -d -k input_password -salt -in /path/to/file.tar.gz | tar zxvf -
 ```
 
 ### 参考
