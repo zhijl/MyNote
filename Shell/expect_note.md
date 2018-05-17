@@ -109,6 +109,14 @@ chmod 777 remote_root_command.exp
 ./remote_root_command.exp <remote_user> <remote_host> <remote_pwd> <remote_root_pwd>
 ```
 
+## sleep
+
+**sleep** 表示暂停几秒
+
+```
+sleep 10
+```
+
 ## 参考
 
 <span id=1>1. [每次进步一点点——linux expect 使用](http://blog.csdn.net/houmou/article/details/53102051)</span>
