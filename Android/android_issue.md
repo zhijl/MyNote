@@ -1,0 +1,44 @@
+# Android 交叉编译动态库中遇到的问题
+
+## problem 1
+
+处理动态库或可执行程序中的 WARNING: linker
+
+```
+WARNING: linker: ./test: unused DT entry: type 0x6ffffffe arg 0x1b34
+WARNING: linker: ./test: unused DT entry: type 0x6fffffff arg 0x3
+```
+
+solved ->
+```
+http://www.dllhook.com/post/211.html
+https://github.com/kost/android-elf-cleaner
+```
+
+## problem 2
+
+链接时出现未定义符 `atexit`
+
+```
+undefined reference to 'atexit'
+```
+
+solved ->
+```
+加上atexit的定义： extern "C" int atexit(void (*)()) {}, 这里atexit的原型要和stdlib.h中的一样
+```
+
+> 参考：https://blog.csdn.net/hp_truth/article/details/42459929
+
+## problem 3
+
+链接时出现未定义符 `__dso_handle`
+
+```
+undefined reference to '__dso_handle'
+```
+
+solved ->
+```
+extern "C"{ void * __dso_handle = 0 ;}  // to solve the ndk-build error
+```
