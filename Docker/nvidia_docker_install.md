@@ -24,6 +24,20 @@ sudo dpkg -i /tmp/nvidia-docker*.deb && rm /tmp/nvidia-docker*.deb
 sudo nvidia-docker run --rm nvidia/cuda nvidia-smi
 ```
 
+#### 问题
+
+```
+nvidia-docker | 2018/06/08 17:20:41 Error: Could not load UVM kernel module. Is nvidia-modprobe installed?
+```
+
+solve ->
+
+```
+sudo apt install nvidia-modprobe
+# 重装 nvidia-docker
+...
+```
+
 #### 参考
 
 1. [Docker - 基于NVIDIA-Docker的Caffe-GPU环境搭建](http://blog.csdn.net/zziahgf/article/details/72578273)
