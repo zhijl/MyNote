@@ -14,7 +14,7 @@ F0411 09:37:03.688216 30007 layer_factory.hpp:81] Check failed: registry.count(t
 
 > 参考：https://stackoverflow.com/questions/30325108/caffe-layer-creation-failure#
 
-## 卷积层中的 CUDNN 问题
+## 卷积层中的 CuDNN 问题
 
 - 问题日志
 
@@ -27,3 +27,21 @@ Check failed: status == CUDNN_STATUS_SUCCESS (3 vs. 0) CUDNN_STATUS_BAD_PARAM
 原因不清楚，解决方法是在卷积层convolution_param中添加 `engine: CAFFE`
 
 > 参考：https://blog.csdn.net/renhanchi/article/details/78500665
+
+## 限制某些网络层不反传
+
+layer 中有一个参数，propagate_down，设置为 0 时，该层以后的都不反传
+
+例如：
+
+```
+layer {
+  name: "loss"
+  type: "EuclideanLoss"
+  bottom: "Fc_1"
+  bottom: "shufflenet_output_512"
+  top: "loss"
+  propagate_down: 0
+  propagate_down: 1
+}
+```
