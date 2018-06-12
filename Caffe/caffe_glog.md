@@ -12,6 +12,8 @@
 google::ShutdownGoogleLogging();
 ```
 
+> `::google::InitGoogleLogging(char* str);` 一个进程中只能调用一次，多次调用会抛异常，所以在初始化时可以全局变量判断是否已经调用过
+
 ## 参考
 
 1. [如何设置和关闭caffe的日志系统(glog)](https://blog.csdn.net/XiaoHeiBlack/article/details/54969642)
