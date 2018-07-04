@@ -27,3 +27,17 @@ wget从ftp下载
 ``` shell
 wget ftp://ip:port/software/os/ubuntu12.04/ubuntu-12.04.1-server-amd64.iso --ftp-user=username --ftp-password=password
 ```
+
+通过进程名杀死进程
+
+``` shell
+ps -ef | grep procedure_name | grep -v grep | awk '{print $2}' | xargs kill -9
+```
+
+Linux 查看进程资源占用
+
+``` shell
+ps -e -o 'pid,comm,args,pcpu,rsz,vsz,stime,user,uid' | grep oracle |  sort -nrk5
+```
+
+1. [查看LINUX进程内存占用情况](https://www.cnblogs.com/gaojun/p/3406096.html)
