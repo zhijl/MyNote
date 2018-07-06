@@ -1,5 +1,12 @@
 # Caffe 问题总结
 
+## 训练和测试时 BatchNorm 层的参数
+
+> 有时候训练网络会不收敛，可能时 BN 层参数设置不对
+
+- 训练时，batch_norm_param 中的 use_global_stats 设置为 false
+- 测试时，batch_norm_param 中的 use_global_stats 设置为 true
+
 ## 找不到内置层
 
 - 问题日志
