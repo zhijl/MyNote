@@ -10,7 +10,7 @@ Compose 通过一个配置文件来管理多个 Docker 容器，在配置文件�
 
 ## 安装
 
-```
+``` shell
 curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 ```
