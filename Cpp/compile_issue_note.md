@@ -26,6 +26,10 @@ error: only position independent executables <PIE> are supported.
 
 编译和链接时加上参数 `-pie -fPIE`
 
+#### undefined reference to `__dso_handle'
+
+在头文件中加入extern  `"C"{ void * __dso_handle = 0 ;}`
+
 #### 参考
 
 1. [error while loading libstdc++.so.6](https://jingyan.baidu.com/article/cdddd41c820b5d53cb00e100.html)
