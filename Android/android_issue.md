@@ -42,3 +42,11 @@ solved ->
 ```
 extern "C"{ void * __dso_handle = 0 ;}  // to solve the ndk-build error
 ```
+
+## problem 4
+
+Android Studio 安装应用到手机上时出现 `INSTALL_FAILED_USER_RESTRICTED` 错误
+
+solved ->
+
+> 检查手机USB应用安装权限（一般在 **系统设置** 的 **开发者选项** 中设置）
