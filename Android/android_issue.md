@@ -50,3 +50,15 @@ Android Studio 安装应用到手机上时出现 `INSTALL_FAILED_USER_RESTRICTED
 solved ->
 
 > 检查手机USB应用安装权限（一般在 **系统设置** 的 **开发者选项** 中设置）
+
+## problem 5
+
+Android 6.0 以上开发版本要求动态获取权限，如果编译的 APP 目标平台选为6.0及以上，可能会用一般的方法获取 IMEI 号码时会报权限问题
+
+```
+READ_PHONE_STATE
+```
+
+solved ->
+
+> 比较简单的做法是将目标平台选为 6.0 以下，如 21
