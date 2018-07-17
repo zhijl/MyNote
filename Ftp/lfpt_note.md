@@ -16,43 +16,43 @@ set ftp:charset gbk
 
 - 设置本地存放路径
 
-```
+``` shel
 lcd /home/zhi/a
 ```
 
 - 下载
 
-```
+``` shell
 get test.txt
 ```
 
 - 批量下载
 
-```
+``` shell
 mget *.txt
 ```
 
 - 断点续传
 
-```
+``` shell
 mget -c *.txt
 ```
 
 允许10个线程并行下载
 
-```
+``` shell
 mget -c -n 10 data.txt
 ```
 
 - 整个目录下载
 
-```
+``` shell
 mirror dirname/
 ```
 
 ### 上传文件
 
-```
+``` shell
 put test.txt
 
 mput *.txt
