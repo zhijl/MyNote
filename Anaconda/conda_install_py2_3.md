@@ -94,7 +94,7 @@ Proceed ([y]/n)? y
 > 给某个特定环境安装package有两个选择，一是切换到该环境下直接安装，二是安装时指定环境参数-n
 
 ```
-activate env_nameconda install pandas
+activate env_nameconda install pandas  # linux 平台为 source activate env_name
 # 安装anaconda发行版中所有的包
 conda install anaconda
 ```
