@@ -69,6 +69,14 @@ docker exec -it name /bin/bash
 /var/lib/docker/volumes
 ```
 
+## 批量删除 none 标签镜像
+
+```
+docker ps -a | grep "Exited" | awk '{print $1 }'|xargs docker stop
+docker ps -a | grep "Exited" | awk '{print $1 }'|xargs docker rm
+docker images|grep none|awk '{print $3 }'|xargs docker rmi
+```
+
 ## 参考
 
 1. [Docker学习笔记之一，搭建一个JAVA Tomcat运行环境](http://www.blogjava.net/yongboy/archive/2013/12/12/407498.html)
