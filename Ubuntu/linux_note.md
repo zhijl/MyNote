@@ -40,4 +40,10 @@ Linux 查看进程资源占用
 ps -e -o 'pid,comm,args,pcpu,rsz,vsz,stime,user,uid' | grep oracle |  sort -nrk5
 ```
 
+Linux 查看某一目录下磁盘占用
+
+``` shell
+du -ah --max-depth=1 dirname # a 表示目录下及子目录下所有文件；h 表示human readale；max-depth表示目录深度；s 表示只显示该目录下的磁盘占用大小
+```
+
 1. [查看LINUX进程内存占用情况](https://www.cnblogs.com/gaojun/p/3406096.html)
