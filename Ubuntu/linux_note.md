@@ -12,6 +12,12 @@ netstat -an | grep -i ESTABLISHED
 find / -name filename.postfix
 ```
 
+显示进程树
+
+``` shell
+pstree
+```
+
 所有环境变量
 
 ``` shell
