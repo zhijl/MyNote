@@ -1,6 +1,6 @@
 # 解读 Caffe 项目
 
-写这个的目的主要是为了深入阅读 Caffe 的源代码，记录阅读过程中的笔记，一年前也尝试阅读 Caffe2 的代码，但后面因为其他项目的开展就停止了相关的阅读学习。而后在过去半年的时间里，多次用到 Caffe 进行网络的训练和网络的部署，其中还折腾各种 Caffe 的交叉编译，遇到了很多问题，一时感觉自己的知识真心不够用，而对于 Caffe 的使用也仅仅只是基于能用起来的程度，而对于其中的很多细节的实现却不是很清楚（比如按自己的想法修改和加入新的网络层或程序），所以很希望能够彻底地阅读这个项目的源代码，包括项目的组织结构、构建细节，以方便以后熟练使用 Caffe，修改 Caffe，或者进一步打造一个更佳的深度学习框架。有点扯远了，希望这次自己能坚持完成 Caffe 的源码阅读。整个过程会花很长时间，记录的过程一开始也会比较乱，但希望后面能逐步整理、修正和完善成一个比较好看的版本:)
+写这个的目的主要是为了深入阅读 Caffe 的源代码，记录阅读过程中的笔记，方便以后再次拾起 Caffe 的方方面面。一年前也尝试阅读 Caffe2 的代码，但后面因为其他项目的开展就停止了相关的阅读学习。而后在过去半年的时间里，多次用到 Caffe 进行网络的训练和网络的部署，其中还折腾各种 Caffe 的交叉编译，遇到了很多问题，一时感觉自己的知识真心不够用，而对于 Caffe 的使用也仅仅只是基于能用起来的程度，而对于其中的很多细节的实现却不是很清楚（比如按自己的想法修改和加入新的网络层或程序），所以很希望能够彻底地阅读这个项目的源代码，包括项目的组织结构、构建细节，以方便以后熟练使用 Caffe，修改 Caffe，或者进一步打造一个更佳的深度学习框架。有点扯远了，希望这次自己能坚持完成 Caffe 的源码阅读。整个过程会花很长时间，记录的过程一开始也会比较乱，但希望后面能逐步整理、修正和完善成一个比较好看的版本:)
 
 > TODO： 探索一款满意的画图工具、如果能够用编程的方式画图并且画面自然风格（好看很重要）还能支持动画制作，那就太好了
 
@@ -901,11 +901,206 @@ cmake 的优点：
 
 简单的说，如果仅仅只是为了在一个平台上构建一个很小的工程，那么 make 会更适合；而面对大工程、跨平台需求，则使用 cmake
 
+**Reference**
+
 1. [CMake和Make之间的区别](https://blog.csdn.net/android_ruben/article/details/51698498)
 2. [make makefile cmake qmake都是什么，有什么区别？](https://www.zhihu.com/question/27455963)
 
 ### 解读 Caffe Makefile
 
+前面有提到 Makefile 是打开 Caffe 项目的一个导火线，并且在 Caffe 中只有一个 Makefile，说明整个项目的所有程序的构建都由这个 Makefile 组织
+
+##### [PART 01]
+
+``` Makefile
+PROJECT := caffe  # 定义项目名
+
+CONFIG_FILE := Makefile.config  # Makefile 配置文件路径（Makefile.config在当前目录下）
+# 检查是否存在 Makefile.config 这个文件，否则使用 make -k 命令终止 make 的执行
+ifeq ($(wildcard $(CONFIG_FILE)),)  # 目的是判断是否存在 Makefile.config 这个文件
+$(error $(CONFIG_FILE) not found. See $(CONFIG_FILE).example.) # error 会 stop make 的执行
+endif
+include $(CONFIG_FILE) # 将 Makefile.config 中的内容导入到此处
+```
+
+[NOTE]: 在 Makefile 规则中，通配符会被自动展开。但在变量的定义和函数引用时，通配符将失效。这种情况下如果需要通配符有效，就需要使用函数 “wildcard”，它的用法是：$(wildcard PATTERN...) 。在 Makefile 中，它被展开为已经存在的、使用空格分开的、匹配此模式的所有文件列表。如果不存在任何符合此模式的文件，函数会忽略模式字符并返回空
+其他：
+1、wildcard : 扩展通配符
+2、notdir   : 去除路径     例如: dir=$(notdir $(src))
+3、patsubst : 替换通配符，需要三个参数   例如: obj=$(patsubst %.c,%.o,$(dir)) # %.c 表示要替换的.c后缀，%.o 表示要替换的.o后缀，后面一项为要操作的列表
+[NOTE]: ifeq 包含两个参数，用逗号隔开
+
+> 下面从 Makefile.config 中的内容分析，因为里面有后面要用到的变量的定义
+
+[Makefile.config.example]
+
+``` Makefile
+# 这个文件是为了方便用户配置 Caffe 的编译和安装而独立出来的，内容是一些变量，对这些变量进行赋值或取消部分注释可以修改编译和安装过程中的部分内容，具体的配置说明可参考 http://caffe.berkeleyvision.org/installation.html
+# 取消注释可以开启 CUDNN 依赖库的使用，用于加入 Caffe 框架中的卷积计算加速
+# USE_CUDNN := 1  # 可选
+
+# 是否编译不含 GPU 依赖的 CPU 版本，如果不取消注释，则默认选择编译 GPU 版本
+# CPU_ONLY := 1
+
+# 是否使用这些数据读写方面的依赖库，默认都使用
+# USE_OPENCV := 0
+# USE_LEVELDB := 0
+# USE_LMDB := 0
+
+# 如果不会有同时读写 LMDB 数据的情况，可以取消该注释，去除代码中部分数据读写时的加锁保护，提高读写效率
+# ALLOW_LMDB_NOLOCK := 1
+
+# 如果使用的是 OpenCV 3 则需要取消该注释（该变量的存在）
+# OPENCV_VERSION := 3
+
+# 取消注释并修改赋值可以改变 cmake 默认的编译器选择
+#   默认使用的编译器 Linux 平台为 g++，OSX 平台为 clang++
+# CUSTOM_CXX := g++
+
+# Caffe 中用到的 CUDA 依赖库配置，包含 CUDA 的 bin 目录 和 include 目录
+CUDA_DIR := /usr/local/cuda
+# 在 Ubuntu 14.04, CUDA 工具可以使用 "sudo apt-get install nvidia-cuda-toolkit" 安装，并取消下列注释
+# CUDA_DIR := /usr
+
+# CUDA 架构配置
+# For CUDA < 6.0, comment the *_50 through *_61 lines for compatibility.
+# For CUDA < 8.0, comment the *_60 and *_61 lines for compatibility.
+# For CUDA >= 9.0, comment the *_20 and *_21 lines for compatibility.
+CUDA_ARCH := -gencode arch=compute_20,code=sm_20 \
+		-gencode arch=compute_20,code=sm_21 \
+		-gencode arch=compute_30,code=sm_30 \
+		-gencode arch=compute_35,code=sm_35 \
+		-gencode arch=compute_50,code=sm_50 \
+		-gencode arch=compute_52,code=sm_52 \
+		-gencode arch=compute_60,code=sm_60 \
+		-gencode arch=compute_61,code=sm_61 \
+		-gencode arch=compute_61,code=compute_61
+
+# BLAS 的值可以选择: atlas/mkl/open
+# atlas 表示 ATLAS (默认)
+# mkl 表示 MKL
+# open 表示 OpenBLAS
+BLAS := atlas
+# 同时还需要指定 (MKL/ATLAS/OpenBLAS) 的头文件路径和链接库路径
+# BLAS_INCLUDE := /path/to/your/blas
+# BLAS_LIB := /path/to/your/blas
+
+# 使用 Homebrew 搜索非标准安装的 openblas 依赖库路径
+# BLAS_INCLUDE := $(shell brew --prefix openblas)/include
+# BLAS_LIB := $(shell brew --prefix openblas)/lib
+
+# 编译 MATLAB 接口，当然需要改成正确的路径
+# MATLAB directory should contain the mex binary in /bin.
+# MATLAB_DIR := /usr/local
+# MATLAB_DIR := /Applications/MATLAB_R2012b.app
+
+# 编译 Python 接口
+# We need to be able to find Python.h and numpy/arrayobject.h.
+PYTHON_INCLUDE := /usr/include/python2.7 \
+		/usr/lib/python2.7/dist-packages/numpy/core/include
+# 使用 Anacoda 中的 Python
+# ANACONDA_HOME := $(HOME)/anaconda
+# PYTHON_INCLUDE := $(ANACONDA_HOME)/include \
+		# $(ANACONDA_HOME)/include/python2.7 \
+		# $(ANACONDA_HOME)/lib/python2.7/site-packages/numpy/core/include
+
+# 取消注释使用 Python 3 (default is Python 2)
+# PYTHON_LIBRARIES := boost_python3 python3.5m
+# PYTHON_INCLUDE := /usr/include/python3.5m \
+#                 /usr/lib/python3.5/dist-packages/numpy/core/include
+
+# 指定 Python 库所在路径 find libpythonX.X.so or .dylib.
+PYTHON_LIB := /usr/lib
+# PYTHON_LIB := $(ANACONDA_HOME)/lib
+
+# 指定 Homebrew 查找非标准安装的 NumPy 库所在路径
+# PYTHON_INCLUDE += $(dir $(shell python -c 'import numpy.core; print(numpy.core.__file__)'))/include
+# PYTHON_LIB += $(shell brew --prefix numpy)/lib
+
+# 打开注释将编译 Python 接口的网络层
+# WITH_PYTHON_LAYER := 1
+
+# 可以在 INLCUDE_DIRS 和 LIBRARY_DIRS 变量中加入自己的目录下的第三方库路径
+INCLUDE_DIRS := $(PYTHON_INCLUDE) /usr/local/include
+LIBRARY_DIRS := $(PYTHON_LIB) /usr/local/lib /usr/lib
+
+# 指定 Homebrew 的安装头文件和路径
+# INCLUDE_DIRS += $(shell brew --prefix)/include
+# LIBRARY_DIRS += $(shell brew --prefix)/lib
+
+# NCCL 加速选择
+# https://github.com/NVIDIA/nccl (last tested version: v1.2.3-1+cuda8.0)
+# USE_NCCL := 1
+
+# 取消注释将使用 `pkg-config` 工具查找 OpenCV 依赖库路径
+# 如果在 $LIBRARY_DIRS 中指定了 OpenCV 的库路径，则 USE_PKG_CONFIG 没有效果
+# USE_PKG_CONFIG := 1
+
+# 执行 `make clean` 时删除的编译目录和发布目录
+BUILD_DIR := build
+DISTRIBUTE_DIR := distribute
+
+# 取消注释后将以 DEBUG 模式编译程序 Does not work on OSX due to https://github.com/BVLC/caffe/issues/171
+# DEBUG := 1
+
+# 运行单元测试时使用的 GPU
+TEST_GPUID := 0
+
+# 关闭命令行的回显，作用等同于给 Q 赋值
+Q ?= @
+
+[NODE] @一般用来关闭命令的回显
+如果 Q 取值为 @，那命令部分就是 @@:，不回显
+如果 Q 没有取值，那命令部分就是 @:，一样不回显
+[NODE] make 命令参数中提供 V=1 可以开启 V，V 是 Verbose 的缩写，打开了 V，所有的编译信息都将打印出来，关闭 V，将获得Beautify output。V 选项对于分析内核的编译很有帮助。而真正决定是否显示冗余回显的，是 V
+```
+
+下面接着 Makefile 中的内容分析
+
+``` Makefile
+BUILD_DIR_LINK := $(BUILD_DIR)
+ifeq ($(RELEASE_BUILD_DIR),)
+	RELEASE_BUILD_DIR := .$(BUILD_DIR)_release
+endif
+ifeq ($(DEBUG_BUILD_DIR),)
+	DEBUG_BUILD_DIR := .$(BUILD_DIR)_debug
+endif
+
+DEBUG ?= 0
+ifeq ($(DEBUG), 1)
+	BUILD_DIR := $(DEBUG_BUILD_DIR)
+	OTHER_BUILD_DIR := $(RELEASE_BUILD_DIR)
+else
+	BUILD_DIR := $(RELEASE_BUILD_DIR)
+	OTHER_BUILD_DIR := $(DEBUG_BUILD_DIR)
+endif
+```
+
+``` Makefile
+# All of the directories containing code.
+SRC_DIRS := $(shell find * -type d -exec bash -c "find {} -maxdepth 1 \
+	\( -name '*.cpp' -o -name '*.proto' \) | grep -q ." \; -print)
+
+# The target shared library name
+LIBRARY_NAME := $(PROJECT)
+LIB_BUILD_DIR := $(BUILD_DIR)/lib
+STATIC_NAME := $(LIB_BUILD_DIR)/lib$(LIBRARY_NAME).a
+DYNAMIC_VERSION_MAJOR 		:= 1
+DYNAMIC_VERSION_MINOR 		:= 0
+DYNAMIC_VERSION_REVISION 	:= 0
+DYNAMIC_NAME_SHORT := lib$(LIBRARY_NAME).so
+#DYNAMIC_SONAME_SHORT := $(DYNAMIC_NAME_SHORT).$(DYNAMIC_VERSION_MAJOR)
+DYNAMIC_VERSIONED_NAME_SHORT := $(DYNAMIC_NAME_SHORT).$(DYNAMIC_VERSION_MAJOR).$(DYNAMIC_VERSION_MINOR).$(DYNAMIC_VERSION_REVISION)
+DYNAMIC_NAME := $(LIB_BUILD_DIR)/$(DYNAMIC_VERSIONED_NAME_SHORT)
+COMMON_FLAGS += -DCAFFE_VERSION=$(DYNAMIC_VERSION_MAJOR).$(DYNAMIC_VERSION_MINOR).$(DYNAMIC_VERSION_REVISION)
+```
+
+**Reference**
+
+1. [跟我一起写Makefile](https://seisman.github.io/how-to-write-makefile/)
+2. [Makefile中的wildcard用法](https://www.cnblogs.com/MMLoveMeMM/articles/3851812.html)
+
+> TODO: 引用 1. 中的 doc 方式看起来很不错，先 mark，以后学习
 
 
 ### 解读 Caffe CMakeLists.txt
