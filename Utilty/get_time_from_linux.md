@@ -15,7 +15,7 @@ void GetLocalTime(int* year, int* mon, int* day) {
   *day = p->tm_mday;
 }
 
-int main(){
+int main() {
   int year, mon, day;
   GetLocalTime(&year, &mon, &day);
   printf("%d %d %d\n", year, mon, day);
