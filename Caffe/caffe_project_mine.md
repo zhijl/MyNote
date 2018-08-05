@@ -1058,6 +1058,7 @@ Q ?= @
 下面接着 Makefile 中的内容分析
 
 ``` Makefile
+# 确定编译目录
 BUILD_DIR_LINK := $(BUILD_DIR)
 ifeq ($(RELEASE_BUILD_DIR),)
 	RELEASE_BUILD_DIR := .$(BUILD_DIR)_release
@@ -1077,19 +1078,21 @@ endif
 ```
 
 ``` Makefile
-# All of the directories containing code.
+# 检索所有包含代码的文件的所在目录
+## find * 列出当前目录及子目录下所有文件或目录的相对路径，-type d 只列出各级目录的相对路径
 SRC_DIRS := $(shell find * -type d -exec bash -c "find {} -maxdepth 1 \
 	\( -name '*.cpp' -o -name '*.proto' \) | grep -q ." \; -print)
 
-# The target shared library name
+# 定义动态链接库名字
 LIBRARY_NAME := $(PROJECT)
 LIB_BUILD_DIR := $(BUILD_DIR)/lib
 STATIC_NAME := $(LIB_BUILD_DIR)/lib$(LIBRARY_NAME).a
-DYNAMIC_VERSION_MAJOR 		:= 1
+DYNAMIC_VERSION_MAJOR 		:= 1  # 主版本号
 DYNAMIC_VERSION_MINOR 		:= 0
 DYNAMIC_VERSION_REVISION 	:= 0
 DYNAMIC_NAME_SHORT := lib$(LIBRARY_NAME).so
 #DYNAMIC_SONAME_SHORT := $(DYNAMIC_NAME_SHORT).$(DYNAMIC_VERSION_MAJOR)
+# 定义带版本号的动态链接库名字
 DYNAMIC_VERSIONED_NAME_SHORT := $(DYNAMIC_NAME_SHORT).$(DYNAMIC_VERSION_MAJOR).$(DYNAMIC_VERSION_MINOR).$(DYNAMIC_VERSION_REVISION)
 DYNAMIC_NAME := $(LIB_BUILD_DIR)/$(DYNAMIC_VERSIONED_NAME_SHORT)
 COMMON_FLAGS += -DCAFFE_VERSION=$(DYNAMIC_VERSION_MAJOR).$(DYNAMIC_VERSION_MINOR).$(DYNAMIC_VERSION_REVISION)
@@ -1102,6 +1105,111 @@ COMMON_FLAGS += -DCAFFE_VERSION=$(DYNAMIC_VERSION_MAJOR).$(DYNAMIC_VERSION_MINOR
 
 > TODO: 引用 1. 中的 doc 方式看起来很不错，先 mark，以后学习
 
+
+``` Makefile
+##############################
+# 获取所有源代码文件
+##############################
+# CXX_SRCS 变量中包含所有除测试代码源文件的其他每个源文件的相对路径
+## Caffe 框架的源代码存放在 src/caffe 目录下
+CXX_SRCS := $(shell find src/$(PROJECT) ! -name "test_*.cpp" -name "*.cpp")  
+# CU_SRCS 中包含 Caffe 框架 CUDA 版本源代码的相对路径
+CU_SRCS := $(shell find src/$(PROJECT) ! -name "test_*.cu" -name "*.cu")
+# TEST_SRCS 中为测试程序代码源文件路径
+TEST_MAIN_SRC := src/$(PROJECT)/test/test_caffe_main.cpp     # 测试程序的主文件
+TEST_SRCS := $(shell find src/$(PROJECT) -name "test_*.cpp") # 每个接口的测试文件
+TEST_SRCS := $(filter-out $(TEST_MAIN_SRC), $(TEST_SRCS))    # 所有的测试文件
+TEST_CU_SRCS := $(shell find src/$(PROJECT) -name "test_*.cu") # CUDA 接口的测试文件
+GTEST_SRC := src/gtest/gtest-all.cpp  # gtest 测试文件，使用 Google gtest 库
+# TOOL_SRCS 中包含一些基础工具的源代码文件，最终将独立便以为各个可执行文件
+TOOL_SRCS := $(shell find tools -name "*.cpp")
+# EXAMPLE_SRCS 中包含测试样例的源代码文件，最终将独立编译为各个可执行文件
+EXAMPLE_SRCS := $(shell find examples -name "*.cpp")
+# BUILD_INCLUDE_DIR 定义一个目录，该目录后面将包含所有编译中需要用到的头文件
+BUILD_INCLUDE_DIR := $(BUILD_DIR)/src
+# PROTO_SRCS 定义 proto 源文件目录
+PROTO_SRC_DIR := src/$(PROJECT)/proto
+PROTO_SRCS := $(wildcard $(PROTO_SRC_DIR)/*.proto)  # 将该文件目录的相对路径抓取出来
+# PROTO_BUILD_DIR 编译过程的临时目录，存放 PROTO_SRCS 中的源文件文件，同时作为编译出的临时文件的路径
+# PROTO_BUILD_INCLUDE_DIR 将包含 PROTO_SRCS 中源文件编译后生成的 .h 文件
+PROTO_BUILD_DIR := $(BUILD_DIR)/$(PROTO_SRC_DIR)
+PROTO_BUILD_INCLUDE_DIR := $(BUILD_INCLUDE_DIR)/$(PROJECT)/proto
+# NONGEN_CXX_SRCS 除了生成的源文件（如 proto），包含其他所有的源文件和头文件，目的是为了后面对每个自己写的源文件中的代码依次进行代码风格检测
+NONGEN_CXX_SRCS := $(shell find \
+	src/$(PROJECT) \
+	include/$(PROJECT) \
+	python/$(PROJECT) \
+	matlab/+$(PROJECT)/private \
+	examples \
+	tools \
+	-name "*.cpp" -or -name "*.hpp" -or -name "*.cu" -or -name "*.cuh")
+LINT_SCRIPT := scripts/cpp_lint.py     # 该文件为 cpp 代码检查工具
+LINT_OUTPUT_DIR := $(BUILD_DIR)/.lint  # cpp_lint.py 的生成文件
+LINT_EXT := lint.txt
+LINT_OUTPUTS := $(addsuffix .$(LINT_EXT), $(addprefix $(LINT_OUTPUT_DIR)/, $(NONGEN_CXX_SRCS)))
+EMPTY_LINT_REPORT := $(BUILD_DIR)/.$(LINT_EXT)
+NONEMPTY_LINT_REPORT := $(BUILD_DIR)/$(LINT_EXT)
+# PY$(PROJECT)_SRC python 的接口封装源文件
+PY$(PROJECT)_SRC := python/$(PROJECT)/_$(PROJECT).cpp
+PY$(PROJECT)_SO := python/$(PROJECT)/_$(PROJECT).so
+PY$(PROJECT)_HXX := include/$(PROJECT)/layers/python_layer.hpp
+# MAT$(PROJECT)_SRC mex 的编译文件
+MAT$(PROJECT)_SRC := matlab/+$(PROJECT)/private/$(PROJECT)_.cpp
+ifneq ($(MATLAB_DIR),)
+	MAT_SO_EXT := $(shell $(MATLAB_DIR)/bin/mexext)
+endif
+MAT$(PROJECT)_SO := matlab/+$(PROJECT)/private/$(PROJECT)_.$(MAT_SO_EXT)
+```
+
+``` Makefile
+##############################
+# Derive generated files
+##############################
+# The generated files for protocol buffers
+PROTO_GEN_HEADER_SRCS := $(addprefix $(PROTO_BUILD_DIR)/, \
+		$(notdir ${PROTO_SRCS:.proto=.pb.h}))
+PROTO_GEN_HEADER := $(addprefix $(PROTO_BUILD_INCLUDE_DIR)/, \
+		$(notdir ${PROTO_SRCS:.proto=.pb.h}))
+PROTO_GEN_CC := $(addprefix $(BUILD_DIR)/, ${PROTO_SRCS:.proto=.pb.cc})
+PY_PROTO_BUILD_DIR := python/$(PROJECT)/proto
+PY_PROTO_INIT := python/$(PROJECT)/proto/__init__.py
+PROTO_GEN_PY := $(foreach file,${PROTO_SRCS:.proto=_pb2.py}, \
+		$(PY_PROTO_BUILD_DIR)/$(notdir $(file)))
+# The objects corresponding to the source files
+# These objects will be linked into the final shared library, so we
+# exclude the tool, example, and test objects.
+CXX_OBJS := $(addprefix $(BUILD_DIR)/, ${CXX_SRCS:.cpp=.o})
+CU_OBJS := $(addprefix $(BUILD_DIR)/cuda/, ${CU_SRCS:.cu=.o})
+PROTO_OBJS := ${PROTO_GEN_CC:.cc=.o}
+OBJS := $(PROTO_OBJS) $(CXX_OBJS) $(CU_OBJS)
+# tool, example, and test objects
+TOOL_OBJS := $(addprefix $(BUILD_DIR)/, ${TOOL_SRCS:.cpp=.o})
+TOOL_BUILD_DIR := $(BUILD_DIR)/tools
+TEST_CXX_BUILD_DIR := $(BUILD_DIR)/src/$(PROJECT)/test
+TEST_CU_BUILD_DIR := $(BUILD_DIR)/cuda/src/$(PROJECT)/test
+TEST_CXX_OBJS := $(addprefix $(BUILD_DIR)/, ${TEST_SRCS:.cpp=.o})
+TEST_CU_OBJS := $(addprefix $(BUILD_DIR)/cuda/, ${TEST_CU_SRCS:.cu=.o})
+TEST_OBJS := $(TEST_CXX_OBJS) $(TEST_CU_OBJS)
+GTEST_OBJ := $(addprefix $(BUILD_DIR)/, ${GTEST_SRC:.cpp=.o})
+EXAMPLE_OBJS := $(addprefix $(BUILD_DIR)/, ${EXAMPLE_SRCS:.cpp=.o})
+# Output files for automatic dependency generation
+DEPS := ${CXX_OBJS:.o=.d} ${CU_OBJS:.o=.d} ${TEST_CXX_OBJS:.o=.d} \
+	${TEST_CU_OBJS:.o=.d} $(BUILD_DIR)/${MAT$(PROJECT)_SO:.$(MAT_SO_EXT)=.d}
+# tool, example, and test bins
+TOOL_BINS := ${TOOL_OBJS:.o=.bin}
+EXAMPLE_BINS := ${EXAMPLE_OBJS:.o=.bin}
+# symlinks to tool bins without the ".bin" extension
+TOOL_BIN_LINKS := ${TOOL_BINS:.bin=}
+# Put the test binaries in build/test for convenience.
+TEST_BIN_DIR := $(BUILD_DIR)/test
+TEST_CU_BINS := $(addsuffix .testbin,$(addprefix $(TEST_BIN_DIR)/, \
+		$(foreach obj,$(TEST_CU_OBJS),$(basename $(notdir $(obj))))))
+TEST_CXX_BINS := $(addsuffix .testbin,$(addprefix $(TEST_BIN_DIR)/, \
+		$(foreach obj,$(TEST_CXX_OBJS),$(basename $(notdir $(obj))))))
+TEST_BINS := $(TEST_CXX_BINS) $(TEST_CU_BINS)
+# TEST_ALL_BIN is the test binary that links caffe dynamically.
+TEST_ALL_BIN := $(TEST_BIN_DIR)/test_all.testbin
+```
 
 ### 解读 Caffe CMakeLists.txt
 
