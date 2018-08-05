@@ -52,3 +52,15 @@ layer {
   propagate_down: 1
 }
 ```
+
+## 不打印网络日志
+
+代码中加入
+
+``` cpp
+// 在程序最开始运行地方，加入
+::google::InitGoogleLogging("");  // 初始化
+FLAGS_stderrthreshold = ::google::ERROR;  // 只打印ERROR级别信息
+// 在程序结束的时候加入代码
+google::ShutdownGoogleLogging();
+```
