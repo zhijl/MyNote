@@ -67,7 +67,7 @@ https://dl.bintray.com/boostorg/release/1.66.0/source/
 
 https://github.com/gflags/gflags/releases
 
-1. 编译
+2. 编译
 
 ```
 > mkdir build
