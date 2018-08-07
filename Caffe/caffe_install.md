@@ -3,13 +3,16 @@
 下面安装过程中 `prefix` 为安装路径
 
 ### 下载源码
+
 从GitHub上获取源码，可以使用Git或者wget
+
 ```
 wget https://github.com/BVLC/caffe/archive/1.0.tar.gz
 ```
 
 ### 依赖程序安装
-- BLAS 
+
+- BLAS
 - Boost
 - protobuf
 - glog
@@ -17,6 +20,7 @@ wget https://github.com/BVLC/caffe/archive/1.0.tar.gz
 - hdf5
 
 可选
+
 - CUDA
 - cuDNN
 - OpenCV
@@ -60,9 +64,11 @@ https://dl.bintray.com/boostorg/release/1.66.0/source/
 ### GFLAGS 安装和配置
 
 1. 下载和解压源码
+
 https://github.com/gflags/gflags/releases
 
-2. 编译
+1. 编译
+
 ```
 > mkdir build
 > cmake ..
@@ -73,6 +79,7 @@ https://github.com/gflags/gflags/releases
 > make
 > make install
 ```
+
 ### GLOG 安装和配置
 
 1. 下载和解压源码
@@ -90,6 +97,7 @@ https://github.com/google/glog
 ### OpenBLAS 安装和配置
 
 1. 下载和解压
+
 https://github.com/xianyi/OpenBLAS/archive/v0.2.20.tar.gz
 
 2. 编译
