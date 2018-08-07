@@ -2,6 +2,13 @@
 
 获取安装软件时的链接信息
 
+rename 可以用于批量修改文件名，perl 语言实现，所以支持正则表达式，但 mv 不能。rename 比较适合用于统一修改文件名的前缀后者后缀
+
+``` shell
+# 将当前目录下所有文件名的大写字母修改为小写
+rename  'y/A-Z/a-z/'  *
+```
+
 ``` shell
 netstat -an | grep -i ESTABLISHED
 ```
