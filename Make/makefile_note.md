@@ -1,6 +1,217 @@
 # 写一个完美的 Makefile （一些准备工作）
 
+### Makefile 核心规则
+
+``` Makefile
+target ... : prerequisites ...
+    command
+    ...
+    ...
+```
+
+- **target** 可以是一个 object file（目标文件），也可以是一个执行文件，还可以是一个标签（label）
+- **prerequisites** 生成该 target 所依赖的文件或 target
+- **command** 该target要执行的命令（任意的shell命令，make 使用 UNIX 的标准 shell，即 /bin/sh  执行命令）
+
+定义了 target 这样一个或者多个目标文件所依赖的一个或多个文件 prerequisites，以及他们具体的关系体现 command
+
+prerequisites 中一个或多个文件更新时，会使 target 也重新生成
+
+### 包含其他 Makefile
+
+``` Makefile
+include <filename>
+# 例如
+include foo.make *.mk $(bar)
+```
+
+也可以在 include 前加一个 -，这样如果 filename 无法正常获取到，make 不会中断执行，而是继续后面的执行
+
+### make 的工作方式
+
+1. 读入所有的 Makefile
+2. 读入被 include 的其它 Makefile
+3. 初始化文件中的变量
+4. 推导隐晦规则，并分析所有规则
+5. 为所有的目标文件创建依赖关系链
+6. 根据依赖关系，决定哪些目标要重新生成
+7. 执行生成命令
+
+1-5步为第一个阶段，6-7为第二个阶段。第一个阶段中，如果定义的变量被使用了，那么，make 会把其展 开在使用的位置。但 make 并不会完全马上展开，make 使用的是拖延战术，如果变量出现在依赖关系的规则 中，那么仅当这条依赖被决定要使用了，变量才会在其内部展开。
+
+### 文件搜寻
+
+- 通过 make 内置变量设置搜索路径
+
+``` Makefile
+VPATH = src:../headers
+```
+
+- 通过 vpath 关键词（命令）设置搜索路径
+
+``` Makefile
+# 为符合模式 <pattern> 的文件指定搜索目录 <directories>
+# 1. <pattern> 需要包含 % 字符
+# 2. % 的意思是匹配零或若干字符
+# 3. 多个目录使用 : 隔开
+vpath <pattern> <directories>
+
+# 清除符合模式 <pattern> 的文件的搜索目录
+vpath <pattern>
+
+# 清除所有已被设置好了的文件搜索目录
+vpath
+
+# 例如
+vpath %.h ../headers
+vpath %.c foo:bar
+vpath %   blish
+```
+
+### 伪目标
+
+使用一个特殊的标记 `.PHONY` 来显式地指明一个目标是伪目标
+
+例如：
+
+``` Makefile
+.PHONY : clean
+```
+
+伪目标同样可以作为 “默认目标”，只要将其放在第一个
+
+### 静态模式
+
+在核心规则上加入了一些灵活的模式
+
+``` Makefile
+<targets ...> : <target-pattern> : <prereq-patterns ...>
+    <commands>
+    ...
+```
+
+- **targets** 定义了一系列的目标文件，可以有通配符。是目标的一个集合
+- **target-parrtern** 是指明了 targets 的模式，也就是的目标集模式
+- **prereq-parrterns** 是目标的依赖模式，它对 target-parrtern 形成的模式再进行一次依赖目标的定义
+
+例如：
+
+``` Makefile
+objects = foo.o bar.o
+
+all: $(objects)
+
+$(objects): %.o: %.c
+    $(CC) -c $(CFLAGS) $< -o $@
+```
+
+依赖文件中含模式 %，那么目标文件中也要含 % 模式
+
 ### 变量
+
+#### 获取值
+
+变量中存放的是文本字符串，大小写敏感
+
+获取变量的值（最好加上括号）：
+
+``` Makefile
+$(VAR) 或者 ${VAR}
+```
+
+如果要使用 $，则通过 $$ 进行转义
+
+#### 赋值
+
+`=` 或者 `:=`
+
+`=` 特点如下：
+
+``` Makefile
+a = b
+b = c
+c = name.c
+```
+
+即变量可以使用后面定义的变量提前赋值，而 `:=` 恰好屏蔽了这种特性
+
+#### 定义一个值为空格的变量
+
+``` Makefile
+nullstring :=
+space := $(nullstring) # end of the line
+```
+
+这里的 `space` 的值就是一个空格，而 `nullstring` 是值为空
+
+#### `?=` 操作符
+
+``` Makefile
+FOO ?= bar
+```
+
+如果 `FOO` 先前被定义过，那么这条语句将不做任何赋值，否则 `FOO` 的值为 bar
+
+这种方式等价于
+
+``` Makefile
+ifeq ($(origin FOO), undefined)
+    FOO = bar
+endif
+```
+
+#### 变量的高级篇
+
+- 替换变量中共同的某一部分
+
+``` Makefile
+$(var:a=b)
+或者
+${var:a=b}
+```
+
+即把 `var` 变量中所有以 a 结尾的词全部替换为以 b 结尾
+
+例如：
+
+``` Makefile
+foo := a.o b.o c.o
+bar := $(foo:.o=.c)
+```
+
+- 把变量的值当成变量
+
+``` Makefile
+x = y
+y = z
+a := $($(x))
+```
+
+甚至还可以
+
+``` Makefile
+x = y
+y = z
+z = u
+a := $($($(x)))
+```
+
+`a` 的值为 u
+
+- 两个变量值组合重命名变量
+
+``` Makefile
+first_second = Hello
+a = first
+b = second
+all = $($a_$b)
+```
+
+- 追加变量
+
+``` Makefile
+VAR += value1
+```
 
 
 
@@ -250,6 +461,71 @@ shell 函数的参数就是 shell 命令
 $(shell <shell-commond>)
 ```
 
+### 小技巧
+
+1. 加 `-`
+
+``` Makefile
+.PHONY : clean
+clean :
+    -rm edit $(objects)
+```
+
+在 rm 前面加上 - ，意思就是，也许某些文件出现问题，但不要管，继续做后面的事。clean 的规则不要放在文件的开头，不然，这就会变成 make 的默认目标，当然也可以在 make 执行时加入 -k 或 --keep-going 参数
+
+2. 尽量不要定义和使用 MAKEFILES 变量
+
+3. 避免晦涩的隐式规则
+
+4. make 中使用通配符，make 支持三个通配符，即 `*` `?` `~`
+
+`~` 表示系统主目录
+`*` 任意长度的任意字符
+`?` 表示任意的一个字符
+
+5. 轻松列出源文件所依赖的头文件
+
+使用编译器的 `-M` 或 `-MM` 选项
+
+``` shell
+gcc -M main.c
+
+main.o: main.c defs.h /usr/include/stdio.h /usr/include/features.h \
+    /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h \
+    /usr/lib/gcc-lib/i486-suse-linux/2.95.3/include/stddef.h \
+    /usr/include/bits/types.h /usr/include/bits/pthreadtypes.h \
+    /usr/include/bits/sched.h /usr/include/libio.h \
+    /usr/include/_G_config.h /usr/include/wchar.h \
+    /usr/include/bits/wchar.h /usr/include/gconv.h \
+    /usr/lib/gcc-lib/i486-suse-linux/2.95.3/include/stdarg.h \
+    /usr/include/bits/stdio_lim.h
+```
+
+``` shell
+gcc -MM main.c
+
+main.o: main.c defs.h
+```
+
+但是这样的依赖关系列表依然不容易在 Makefile 中很好的使用，不过 GNU 组织建议让编译器为每一个源文件的自动生成的依赖关系放到一个文件中，为每一个 name.c 的文件都生成一个 name.d 的 Makefile 文件，.d 文件中存放对应 .c 文件的依赖关系
+
+例如：
+
+``` Makefile
+%.d: %.c
+    @set -e; rm -f $@; \
+    $(CC) -M $(CPPFLAGS) $< >; $@.$$$$; \
+    sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ >; $@; \
+    rm -f $@.$$$$
+```
+
+`$$$$` 是生成一个随机编码
+
+6. 在命令前加 @，这样 make 将不会把命令语句也输出，或者执行 make 时加入 -s | --silent | --quiet 参数也能全面禁止命令显示
+
+
+
 引用：
 
 1. [Makefile常用函数总结](https://blog.csdn.net/ustc_dylan/article/details/6963248)
+2. [跟我一起写Makefile](https://seisman.github.io/how-to-write-makefile/rules.html)
