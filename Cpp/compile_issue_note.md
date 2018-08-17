@@ -30,6 +30,23 @@ error: only position independent executables <PIE> are supported.
 
 在头文件中加入extern  `"C"{ void * __dso_handle = 0 ;}`
 
+#### 交叉编译 Android 版本的库时 `__android_log_print`
+
+``` text
+undefined reference to '__android_log_print'
+```
+
+在 android.mk 文件中找到
+
+include $(CLEAR_VARS)
+
+在下面增加一行：
+
+``` Makefile
+LOCAL_LDLIBS := -lm -llog
+```
+
 #### 参考
 
 1. [error while loading libstdc++.so.6](https://jingyan.baidu.com/article/cdddd41c820b5d53cb00e100.html)
+2. [JNI编程-- undefined reference to `__android_log_print' 的解决办法](https://blog.csdn.net/forandever/article/details/50393499)

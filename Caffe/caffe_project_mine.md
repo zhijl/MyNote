@@ -1182,7 +1182,7 @@ CXX_OBJS := $(addprefix $(BUILD_DIR)/, ${CXX_SRCS:.cpp=.o})
 CU_OBJS := $(addprefix $(BUILD_DIR)/cuda/, ${CU_SRCS:.cu=.o})
 PROTO_OBJS := ${PROTO_GEN_CC:.cc=.o}
 OBJS := $(PROTO_OBJS) $(CXX_OBJS) $(CU_OBJS)
-# tool, example, and test objects
+# tool, example, 和 test 可执行文件的名字定义
 TOOL_OBJS := $(addprefix $(BUILD_DIR)/, ${TOOL_SRCS:.cpp=.o})
 TOOL_BUILD_DIR := $(BUILD_DIR)/tools
 TEST_CXX_BUILD_DIR := $(BUILD_DIR)/src/$(PROJECT)/test
@@ -1210,6 +1210,31 @@ TEST_BINS := $(TEST_CXX_BINS) $(TEST_CU_BINS)
 # TEST_ALL_BIN is the test binary that links caffe dynamically.
 TEST_ALL_BIN := $(TEST_BIN_DIR)/test_all.testbin
 ```
+
+[NOTE] Makefile 静态模式
+
+语法：
+
+``` Makefile
+<targets ...>: <target-pattern>: <prereq-patterns ...>
+　　<commands>
+...
+```
+
+例如：
+
+``` Makefile
+objects = foo.o bar.o
+all: $(objects)
+$(objects): %.o: %.c
+	$(CC) -c $(CFLAGS) $< -o $@
+
+# $< 取依赖目标模式中的值，即 xx.c；$@ 取目标模式中的值，即 xx.o
+```
+
+[REF]
+
+1. [Makefile 静态模式——$(objects): %.o: %.c、$<](https://www.cnblogs.com/liqiu/archive/2013/03/15/2961518.html)
 
 ### 解读 Caffe CMakeLists.txt
 
