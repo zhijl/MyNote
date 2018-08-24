@@ -184,6 +184,20 @@ channels:
 show_channel_urls: yes
 ```
 
+### 离线安装 Python 库
+
+比如有时后清华镜像中没有所需的版本库，这是 conda 将从官方站点下载，由于网站在国外，在没有代理的情况下下载速度超级慢，而且经常网络中断，所以可以尝试从浏览器代理的情况下访问官网，下载所需的版本库后，离线安装
+
+conda 资源官网
+
+``` url
+https://anaconda.org/anaconda/repo
+```
+
+``` shell
+conda install ***.tar.bz2
+```
+
 ## 参考
 
 [使用conda管理python环境](https://zhuanlan.zhihu.com/p/22678445)
