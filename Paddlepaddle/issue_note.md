@@ -18,3 +18,13 @@ ImportError: numpy.core.multiarray failed to import
 **总结：**
 
 pip 安装的 gpu 版本深度学习框架的编译版本的 CUDA 和 CuDNN 一定要与系统版本当前配置的版本一致
+
+### paddle.fluid.core.EnforceNotMet: enforce allocating <= available failed, 10238983668 > 9509207808
+
+paddle.fluid.core.EnforceNotMet: enforce allocating <= available failed, 10238983668 > 9509207808
+
+通过如下变量设定使用的显存占用的比例
+
+```
+export FLAGS_fraction_of_gpu_memory_to_use=0.1
+```
