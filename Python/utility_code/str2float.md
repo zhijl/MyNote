@@ -2,6 +2,7 @@
 
 ``` python
 data = ['1','3.2','2']
-map(eval, data)
+data_ft = map(eval, data)
 print data
+print data_ft
 ```
