@@ -41,7 +41,7 @@ layer 中有一个参数，propagate_down，设置为 0 时，该层以后的都
 
 例如：
 
-```
+``` text
 layer {
   name: "loss"
   type: "EuclideanLoss"
@@ -63,4 +63,19 @@ layer {
 FLAGS_stderrthreshold = ::google::ERROR;  // 只打印ERROR级别信息
 // 在程序结束的时候加入代码
 google::ShutdownGoogleLogging();
+```
+
+## Caffe 编译报错
+
+``` text
+/home/zhi/anaconda3/lib/libpng16.so.16: undefined reference to `inflateValidate@ZLIB_1.2.9'
+...
+```
+
+解决：
+
+在 Makefile 中加入
+
+``` text
+LINKFLAGS := -Wl,-rpath,$(HOME)/anaconda3/lib
 ```
