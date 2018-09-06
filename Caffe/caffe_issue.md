@@ -82,7 +82,7 @@ LINKFLAGS := -Wl,-rpath,$(HOME)/anaconda3/lib
 
 ## 测试阶段 DuDNN 报错
 
-训练时没报错，但测试阶段报错
+训练时没报错，但测试阶段报错（测试使用的是 Caffe Python 接口）
 
 ``` text
 F0906 23:21:33.909919 32434 cudnn_conv_layer.cu:28] Check failed: status == CUDNN_STATUS_SUCCESS (8 vs. 0)  CUDNN_STATUS_EXECUTION_FAILED
