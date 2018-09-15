@@ -72,5 +72,26 @@ libm.so.6 => /lib/libm.so.6 (0x004bd000)
 3. gcc -Wl 把参数传递给链接器 ld
 4. gcc -l 显式链接 C 库
 
-转自：
+## 交叉编译加速选项
+
+1. C++ 里面 STL 自带的 vector 存取效率不高，在可能的情况下用指针数组代替会大幅提高性能
+2. C++ 中对象的传递，尽可能使用引用，避免无意义的对象拷贝过程
+3. 编译的时候加上 `-O3, -DNDEBUG` 这两个参数优化选项，可以提高编译出来的程序运行速度
+4. 针对多核心的处理器，可以加上 openMP，进行多线程处理。尤其对于循环的加速效果很明显
+5. arm 平台，`-mcpu=cortex-a7 -ffast-math` 性能提升了约 10%
+6. arm 平台，`-mfpu=vfpv4-d16` 这个加上，`-mfpu=neon` 就无效了
+
+## 查看 *.a 库中的文件、函数、变量情况
+
+``` shell
+# 查看文件
+ar -t *.a
+# 查看函数、变量
+nm *.a
+```
+
+转自和引用：
+
 https://blog.csdn.net/sun_x_t/article/details/7171771
+
+https://blog.csdn.net/jacke121/article/details/54694995
