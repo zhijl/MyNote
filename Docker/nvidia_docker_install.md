@@ -38,6 +38,32 @@ sudo apt install nvidia-modprobe
 ...
 ```
 
+### 更新：安装 NVIDIA-Docker 2.0
+
+#### 卸载 nvidia-docker 1.0
+
+``` shell
+docker volume ls -q -f driver=nvidia-docker | xargs -r -I{} -n1 docker ps -q -a -f volume={} | xargs -r docker rm -f
+
+sudo apt-get purge nvidia-docker
+```
+
+#### 安装 nvidia-docker 2.0
+
+``` shell
+# 配置仓库
+curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | \
+  sudo apt-key add -
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | \
+  sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+sudo apt-get update
+# 安装 nvidia-docker2
+sudo apt-get install nvidia-docker2
+sudo pkill -SIGHUP dockerd
+```
+
 #### 参考
 
 1. [Docker - 基于NVIDIA-Docker的Caffe-GPU环境搭建](http://blog.csdn.net/zziahgf/article/details/72578273)
+2. [官方安装指南](https://github.com/nvidia/nvidia-docker/wiki/Installation-(version-2.0))
