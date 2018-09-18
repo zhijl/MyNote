@@ -64,3 +64,12 @@ solve ->
 ```
 一般出现在重装 Nvidia 驱动时，解决方法是先尝试重启系统
 ```
+
+## 最新：CUDA 9 安装
+
+代理情况下官网下载 deb 安装包
+
+1. `sudo dpkg -i cuda-repo-ubuntu1604-9-2-local_9.2.148-1_amd64.deb`
+2. `sudo apt-key add /var/cuda-repo-<version>/7fa2af80.pub`
+3. `sudo apt-get update`
+4. `sudo apt-get install cuda`
