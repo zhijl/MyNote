@@ -58,6 +58,13 @@ adb start-server
 adb connect 192.168.1.120
 ```
 
+## 尝试重启 adb
+
+``` sh
+adb kill-server
+adb start-server
+```
+
 参考：
 
 https://blog.csdn.net/leokelly001/article/details/43485691
