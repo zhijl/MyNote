@@ -38,7 +38,7 @@ SUBSYSTEM=="usb", ATTRS{idVendor}=="2717", ATTRS{idProduct}=="9039", MODE="0666"
 
 ### 重启服务
 
-重启 usb 服务
+重启 usb 服务（注意：因为 ubuntu 系统都是默认以非root身份在运行的，要使用 usb 调试，需要 sudo 支持）
 
 ``` sh
 sudo chmod a+rx /etc/udev/rules.d/70-android.rules
@@ -49,7 +49,7 @@ sudo service udev restart
 
 ``` sh
 adb kill-server
-adb start-server
+adb start-server  实际上它会启动一个 adb fork-server server
 ```
 
 ## 网线连接
@@ -64,6 +64,15 @@ adb connect 192.168.1.120
 adb kill-server
 adb start-server
 ```
+
+## issue
+
+```
+List of devices attached 
+????????????	no permissions
+```
+
+可以加上 `sudo` 权限重启 adb
 
 参考：
 
