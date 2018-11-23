@@ -72,4 +72,11 @@ du -ah --max-depth=1 dirname # a 表示目录下及子目录下所有文件；h 
 du -sh
 ```
 
+ubuntu 删除 repository ppa
+
+```
+sudo add-apt-repository --remove ppa:tboox/xmake
+```
+
+
 1. [查看LINUX进程内存占用情况](https://www.cnblogs.com/gaojun/p/3406096.html)
