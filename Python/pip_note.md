@@ -38,6 +38,18 @@ pip install tensorflow==1.3 tensorflow-gpu==1.3 -i https://pypi.tuna.tsinghua.ed
 conda install tensorflow=1.3 tensorflow-gpu=1.3
 ```
 
+#### pip 生成 requirements.txt
+
+```
+pip freeze > requirements.txt
+```
+
+对应的根据 `requirements.txt` 安装依赖
+
+```
+pip install -r requirements.txt
+```
+
 #### 参考
 
 1. [修改pip安装源加快python模块安装](http://blog.csdn.net/u012592062/article/details/51966649)
