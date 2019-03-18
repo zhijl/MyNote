@@ -6,6 +6,52 @@ Shell 是指一种应用程序，这个应用程序提供了一个界面，用�
 
 Ken Thompson 的 sh 是第一种 Unix Shell，Windows Explorer 是一个典型的图形界面 Shell。
 
+## 获取执行结果返回值
+
+``` shell
+command1
+echo $?
+```
+
+`$?` 即为上一个命令的退出时的状态码
+
+``` shell
+command1 > /dev/null
+echo $?
+```
+
+参考：https://blog.csdn.net/yxys01/article/details/76548934
+
+## 退出脚本或函数并返回错误码
+
+退出脚本可使用 `exit n`，错误码即 `n`
+
+退出码（exit status，或exit code）的约定：
+
+- 0 表示成功（Zero - Success）
+
+- 非 0 表示失败（Non-Zero  - Failure）
+
+- 2 表示用法不当（Incorrect Usage）
+
+- 127 表示命令没有找到（Command Not Found）
+
+- 126 表示不是可执行的（Not an executable）
+
+- >= 128 信号产生
+
+函数的退出使用 `return n`
+
+条件语句的退出使用 `break`
+
+## Shell 标准错误输出重定向
+
+``` sh
+/tmp/test.sh > /tmp/test.log 2>&1
+```
+
+参考：https://www.cnblogs.com/vijayfly/p/6234575.html
+
 ## Shell 种类
 
 - Bourne Shell（/usr/bin/sh 或 /bin/sh）
@@ -292,6 +338,78 @@ fi
 | -s file | 检测文件是否为空（文件大小是否大于0），不为空返回 true | [ -s $file ] 返回 true | 
 | -e file | 检测文件（包括目录）是否存在，如果是，则返回 true | [ -e $file ] 返回 true | 
 
+补充：
+
+```
+ Shell中判断语句if中-z至-d的意思
+
+[ -a FILE ] 如果 FILE 存在则为真。
+
+[ -b FILE ] 如果 FILE 存在且是一个块特殊文件则为真。
+
+[ -c FILE ] 如果 FILE 存在且是一个字特殊文件则为真。
+
+[ -d FILE ] 如果 FILE 存在且是一个目录则为真。
+
+[ -e FILE ] 如果 FILE 存在则为真。
+
+[ -f FILE ] 如果 FILE 存在且是一个普通文件则为真。
+
+[ -g FILE ] 如果 FILE 存在且已经设置了SGID则为真。
+
+[ -h FILE ] 如果 FILE 存在且是一个符号连接则为真。
+
+[ -k FILE ] 如果 FILE 存在且已经设置了粘制位则为真。
+
+[ -p FILE ] 如果 FILE 存在且是一个名字管道(F如果O)则为真。
+
+[ -r FILE ] 如果 FILE 存在且是可读的则为真。
+
+[ -s FILE ] 如果 FILE 存在且大小不为0则为真。
+
+[ -t FD ] 如果文件描述符 FD 打开且指向一个终端则为真。
+
+[ -u FILE ] 如果 FILE 存在且设置了SUID (set user ID)则为真。
+
+[ -w FILE ] 如果 FILE 如果 FILE 存在且是可写的则为真。
+
+[ -x FILE ] 如果 FILE 存在且是可执行的则为真。
+
+[ -O FILE ] 如果 FILE 存在且属有效用户ID则为真。
+
+[ -G FILE ] 如果 FILE 存在且属有效用户组则为真。
+
+[ -L FILE ] 如果 FILE 存在且是一个符号连接则为真。
+
+[ -N FILE ] 如果 FILE 存在 and has been mod如果ied since it was last read则为真。
+
+[ -S FILE ] 如果 FILE 存在且是一个套接字则为真。
+
+[ FILE1 -nt FILE2 ] 如果 FILE1 has been changed more recently than FILE2, or 如果 FILE1 exists and FILE2 does not则为真。
+
+[ FILE1 -ot FILE2 ] 如果 FILE1 比 FILE2 要老, 或者 FILE2 存在且 FILE1 不存在则为真。
+
+[ FILE1 -ef FILE2 ] 如果 FILE1 和 FILE2 指向相同的设备和节点号则为真。
+
+[ -o OPTIONNAME ] 如果 shell选项 “OPTIONNAME” 开启则为真。
+
+[ -z STRING ] “STRING” 的长度为零则为真。
+
+[ -n STRING ] or [ STRING ] “STRING” 的长度为非零 non-zero则为真。
+
+[ STRING1 == STRING2 ] 如果2个字符串相同。 “=” may be used instead of “==” for strict POSIX compliance则为真。
+
+[ STRING1 != STRING2 ] 如果字符串不相等则为真。
+
+[ STRING1 < STRING2 ] 如果 “STRING1” sorts before “STRING2” lexicographically in the current locale则为真。
+
+[ STRING1 > STRING2 ] 如果 “STRING1” sorts after “STRING2” lexicographically in the current locale则为真。
+
+[ ARG1 OP ARG2 ] “OP” is one of -eq, -ne, -lt, -le, -gt or -ge. These arithmetic binary operators return true if “ARG1” is equal to, not equal to, less than, less than or equal to, greater than, or greater than or equal to “ARG2”, respectively. “ARG1” and “ARG2” are integers.
+
+摘自：https://www.cnblogs.com/coffy/p/5748292.html
+```
+
 ## Shell 基础命令
 
 - echo 回显字符串
@@ -351,8 +469,6 @@ printf "%s and %d \n"
 
 - test 命令
 
-
-
 ## Shell 流程控制
 
 
@@ -364,6 +480,21 @@ printf "%s and %d \n"
 
 ## Shell 文件包含
 
+## sed 简单使用
+
+加 -i 文件内直接替换
+
+在文件尾追加（下面例子中追加字符串为“TAIL”）
+
+``` sh
+sed 's/$/&TAIL/g' test.file
+```
+
+在文件头追加（下面例子中追加字符串为“HEAD”）
+
+``` sh
+sed 's/^/HEAD&/g' test.file
+```
 
 ## 参考
 
