@@ -14,6 +14,22 @@ arm-linux-gnueabihf-gcc: error while loading shared libraries: libstdc++.so.6: c
 sudo apt-get install lib32stdc++6
 ```
 
+#### 交叉编译中遇到 `xxx.so: unexpected reloc type 0x03` 问题
+
+主要是在编译库时，没有使用 `-fPIC`
+
+通过如下指令查看该库
+
+``` sh
+readelf -r libtest.so|grep R_ARM_REL32
+```
+
+如果使用- fPIC，这个函数的重定向类型是 R_ARM_GLOB_DAT
+
+引用：
+
+https://www.cnblogs.com/sciapex/p/9662811.html
+
 #### 交叉编译中遇到的 PIE 问题
 
 问题日志
