@@ -90,6 +90,19 @@ ar -t *.a
 nm *.a
 ```
 
+## ldd 的 `-u` 参数
+
+``` sh
+# 查看某个库多余链接的动态库
+ldd -u libcaffe.so
+```
+
+在链接时加上参数 `-Wl,--as-needed` 可避免链接不需要的库
+
+``` sh
+ -Wl,--as-needed -lm -ldl
+```
+
 转自和引用：
 
 https://blog.csdn.net/sun_x_t/article/details/7171771
