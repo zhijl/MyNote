@@ -6,6 +6,16 @@ Shell 是指一种应用程序，这个应用程序提供了一个界面，用�
 
 Ken Thompson 的 sh 是第一种 Unix Shell，Windows Explorer 是一个典型的图形界面 Shell。
 
+## 一些小工具和 trick
+
+``` sh
+strace caffe.bin   # 可以看到很多程序的系统状态信息
+```
+
+``` sh
+objdump -s --section=.comment caffe.bin    # Linux 上查看二进制库和文件是哪个版本的编译器编译的（也可能查不到）
+```
+
 ## 获取执行结果返回值
 
 ``` shell
