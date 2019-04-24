@@ -16,15 +16,21 @@ sudo apt-get install lib32stdc++6
 
 #### 交叉编译中遇到 `xxx.so: unexpected reloc type 0x03` 问题
 
-主要是在编译库时，没有使用 `-fPIC`
-
-通过如下指令查看该库
+主要是在编译该动态库时，没有使用 `-fPIC`
 
 ``` sh
-readelf -r libtest.so|grep R_ARM_REL32
+readelf -d libtest.so | grep TEXTREL
 ```
 
-如果使用- fPIC，这个函数的重定向类型是 R_ARM_GLOB_DAT
+有 `TEXTREL` 说明该目标文件是 `non-PIC`， 没有则是 `PIC` 的 `non-PIC` 在使用 `-fPIC` 选项会出现问题
+
+通过如下指令查看该库具体是那个函数
+
+``` sh
+readelf -r libtest.so | grep R_ARM_REL32
+```
+
+如果使用 -fPIC，这个函数的重定向类型是 R_ARM_GLOB_DAT
 
 引用：
 
