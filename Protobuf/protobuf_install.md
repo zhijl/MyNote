@@ -17,6 +17,18 @@ make check
 sudo make install
 ```
 
+**CMake 方式编译**
+
+``` sh
+git clone https://github.com/protocolbuffers/protobuf.git
+cd protobuf/cmake
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=install -Dprotobuf_BUILD_TESTS=NO -DBUILD_SHARED_LIBS=OFF ..
+make
+make install
+```
+
 **INSTALL_DIR**  自定义安装目录
 
 如果要使用Protocol的Python接口，在解压目录下还需要将python目录中，执行
