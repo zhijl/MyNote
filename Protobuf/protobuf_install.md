@@ -1,6 +1,45 @@
-# Protocol Linux 平台安装
+## Protobuf Mac 平台安装
 
-## 步骤
+#### 步骤
+
+``` shell
+brew install protobuf
+```
+
+出现的问题：
+
+```
+(base) Kins-MacBook-Pro:~ zhi$ brew install protobuf
+Warning: protobuf 3.7.1 is already installed, it's just not linked
+You can use `brew link protobuf` to link this version.
+(base) Kins-MacBook-Pro:~ zhi$ brew link protobuf
+Linking /usr/local/Cellar/protobuf/3.7.1... 
+Error: Could not symlink include/google
+/usr/local/include is not writable.
+(base) Kins-MacBook-Pro:~ zhi$ sudo mkdir /usr/local/include
+Password:
+(base) Kins-MacBook-Pro:~ zhi$ brew link protobuf
+Linking /usr/local/Cellar/protobuf/3.7.1... 
+Error: Could not symlink include/google
+/usr/local/include is not writable.
+```
+
+Protobuf install on mac fails with 'could not symlink’
+
+解决：
+
+``` shell
+sudo mkdir /usr/local/lib
+sudo mkdir /usr/local/include
+sudo chown +R `whoami` /usr/local/lib
+sudo chown +R `whoami` /usr/local/include
+
+brew link --overwrite protobuf
+```
+
+## Protobuf Linux 平台安装
+
+#### 步骤
 
 1. 下载protocol
 
