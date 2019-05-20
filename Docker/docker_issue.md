@@ -1,5 +1,31 @@
 # 使用 Docker 的过程中遇到的问题
 
+### docker load ... : no space left on device
+
+当 load 一个镜像文件时，提示 `no space left no device` 的错误
+
+具体现象如下：
+
+``` text
+docker load --input rknn-toolkit-1.0.0-docker.tar.gz
+0de2edf7bff4: Loading layer  121.3MB/121.3MB
+b2fd8b4c3da7: Loading layer  15.87kB/15.87kB
+f67191ae09b8: Loading layer  11.78kB/11.78kB
+68dda0c9a8cd: Loading layer  3.072kB/3.072kB
+37ff0418e4a3: Loading layer  4.096kB/4.096kB
+7d8c7e726e3a: Loading layer  862.2MB/862.2MB
+b68bd7d0db1d: Loading layer  4.608kB/4.608kB
+c2f6bd4a2e6e: Loading layer  2.048kB/2.048kB
+1bb26f8d58f4: Loading layer  305.3MB/689MB
+Error processing tar file(exit status 1): write /usr/local/lib/python3.5/dist-packages/scipy/interpolate/dfitpack.cpython-35m-x86_64-linux-gnu.so: no space left on device
+```
+
+`rknn-toolkit-1.0.0-docker.tar.gz  2G`
+
+解决方法：
+
+把本地镜像删除一部分
+
 ### Docker: no space left on device
 
 ``` text
