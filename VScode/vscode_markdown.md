@@ -2,6 +2,7 @@
 > VScode默认安装Markdown插件
 
 ## 预览插件推荐
+
 **[Markdown Preview Enhanced](https://shd101wyy.github.io/markdown-preview-enhanced/#/zh-cn/)**
 
 * 支持图像显示
