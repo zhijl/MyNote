@@ -51,9 +51,14 @@ https://dl.bintray.com/boostorg/release/1.66.0/source/
 ```
 > tar zxvf boost_1_66_0_rc2.tar.gz
 > cd boost_1_66_0/
-> ./bootstrap.sh --with-libraries=system,filesystem,thread,python
-> ./b2
+> ./bootstrap.sh --with-libraries=system,thread,filesystem,regex,python
+> ./b2 --prefix=`pwd`/../install/boost -q --debug-configuration cxxflags=-fPIC link=static install
+```
 
+在下面文件加入 `-fPIC`
+
+```
+tools/build/src/tools/gcc.jam
 ```
 
 ```
