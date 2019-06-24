@@ -75,6 +75,8 @@ D:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\ vcvarsall.bat
 
 然后再 `cmake -G "NMake Makefiles"` 就不会有那样的问题了
 
+当然，也可以直接打开 `VS201x x86 Native Tools Command Prompt` ，在这个 cmd 中直接跑 `cmake -G "NMake Makefiles"` 是没问题的
+
 参考：
 
 - [CMake“NMake Makefile”生成器无法编译](https://cloud.tencent.com/developer/ask/198934/answer/309934)
