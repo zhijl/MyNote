@@ -17,6 +17,6 @@ dx --dex --output=runme.jar runme.class package/*.class
 
 ``` shell
 adb push runme.jar /data
-adb dalvikvm -cp /data/runme.jar runme
+adb shell dalvikvm -cp /data/runme.jar runme
 ...
 ```
