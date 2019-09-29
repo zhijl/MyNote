@@ -1,18 +1,44 @@
-# CUDA 安装
+# CUDA 安装和 NVIDIA 驱动安装
 
 ## 硬件及系统
 
 - Ubuntu 16.04 64位
 - GTX 1080
 
-## Nvidia 驱动及 CUDA / CuDNN 安装
+## NVIDIA 驱动及 CUDA / CuDNN 安装
 
-Nvidia 驱动安装
+NVIDIA 驱动安装
 
 ```
 sudo add-apt-repository ppa:xorg-edgers/ppa
 sudo apt-get update
 sudo apt-get install nvidia-375 #此处对应自己安装的的驱动版本
+```
+
+安装新版驱动前需卸载当前的驱动，如果是如源安装的，则通过 apt 的方式卸载，如果是通过 `run` 方式，最好的方式是，通过 NVIDIA 提供的卸载脚本进行卸载
+
+卸载命令位置 `/usr/bin/nvidia-uninstall`，以下命令即可卸载
+
+```
+sudo /usr/bin/nvidia-uninstall
+```
+
+不找这个命令的位置，也可以
+
+```
+sudo apt install autoremove --purge nvidia*
+```
+
+plus:
+
+```
+sudo apt-cache search nvidia  #查找最新版本的驱动
+```
+
+```
+sudo add-apt-repository ppa:graphics-drivers
+sudo apt-get update
+sudo apt-get install nvidia-430 #此处对应自己安装的的驱动版本
 ```
 
 CUDA 安装
