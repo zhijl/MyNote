@@ -9,7 +9,6 @@ git branch -r
 
 **方法一：**
 
-
 ``` shell
 git checkout -b 本地分支名 origin/远程分支名
 ```
@@ -49,4 +48,10 @@ git branch -d branch_name
 
 ``` shell
 git branch origin remote_branch_nameA:loacl_branch_nameA
+```
+
+### clone 仓库时，只 clone 最近一次 commit
+
+``` shell
+git clone --depth 1 url
 ```
