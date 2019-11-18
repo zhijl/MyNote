@@ -55,3 +55,11 @@ git branch origin remote_branch_nameA:loacl_branch_nameA
 ``` shell
 git clone --depth 1 url
 ```
+
+### clone 某一分支
+
+``` sh
+git clone -d branch_name url
+```
+
+**如果要推送空的目录到远程服务器，可以在该空目录下创建一个.gitkeep文件即可**
