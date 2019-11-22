@@ -44,7 +44,7 @@ https://blog.csdn.net/qq_29257691/article/details/100535361
 
 在拉取一个镜像的时候，提示
 
-```
+``` text
 latest: Pulling from caffe/cuda
 a02a4930cb5d: Pull complete 
 56f7f0b3fd8b: Pull complete 
@@ -92,7 +92,9 @@ Filesystem      Size  Used Avail Use% Mounted on
 
 ### 解决方法
 
-我们可以把 docker 的根目录改到另一个地方
+最简单的方法就是删除部分不需要的镜像，腾出足够空间即可
+
+另一种方法，可以把 docker 的根目录改到另一个地方
 
 - 创建目标目录 `mkdir -p /etc/systemd/system/docker.service.d/`
 - 创建配置文件，配置文件中的 `/docker-root` 为 docker 新的根目录
