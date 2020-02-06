@@ -1,5 +1,32 @@
 ## 编译中遇到的问题
 
+#### 编译动态库的时候，链接出错 `recompile with -fPIC`
+
+错误信息如下：
+
+``` text
+/usr/bin/ld: xxxx.o: relocation R_X86_64_PC32 against undefined symbol `_ZTIj@@CXXABI_1.3' can not be used when making a shared object; recompile with -fPIC
+```
+
+（查看 Makefile，在编译的时候有加 -fPIC，故排除这种情况）
+
+解决：可能是编译时加入了 `-fPIE` 选项，去掉后，可正常链接得到目标动态库
+
+#### `virtual memory exhausted: Cannot allocate memory`
+
+用 hisiv500 交叉编译器在编译一个很大的源文件时，报出的错，编译 x64 时需要用掉 5 GB 内存
+
+(未解决)
+
+#### `undefined reference to `memcpy@GLIBC_2.14'`
+
+查看系统的 GLIBC 版本
+
+``` shell
+strings /lib64/libc.so.6 |grep GLIBC
+strings /lib/x86_64-linux-gnu/libc.so.6 |grep GLIBC
+```
+
 #### 交叉编译 gcc 运行时缺少 libstdc++.so.6
 
 ``` text
