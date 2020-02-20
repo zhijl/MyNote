@@ -1,3 +1,8 @@
+### 获取最新的 tag
+
+``` sh
+git describe --tags `git rev-list --tags --max-count=1`
+```
 
 ### 拉取远程分支到本地
 
@@ -59,7 +64,7 @@ git clone --depth 1 url
 ### clone 某一分支
 
 ``` sh
-git clone -d branch_name url
+git clone -b branch_name url
 ```
 
 **如果要推送空的目录到远程服务器，可以在该空目录下创建一个.gitkeep文件即可**
