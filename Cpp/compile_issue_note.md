@@ -1,5 +1,24 @@
 ## 编译中遇到的问题
 
+#### 关于 -Wl,--whole-archive 使用时遇到的问题
+
+有时候要把一个静态库以 whole-archive 的方式链接进动态库里，这时可能会报这样的错：
+
+``` text
+/usr/lib/x86_64-linux-gnu/libc_nonshared.a(elf-init.oS): In function `__libc_csu_init':
+(.text+0xe): undefined reference to `__init_array_start'
+/usr/bin/ld: /usr/lib/x86_64-linux-gnu/libc_nonshared.a(elf-init.oS): relocation R_X86_64_PC32 against undefined hidden symbol `__init_array_start' can not be used when making a shared object
+/usr/bin/ld: final link failed: Bad value
+```
+
+解决方法是：
+
+``` sh
+ -Wl,--whole-archive ../../third_party/centos7_gcc4.8_x64/MNN-20200525/lib/libMNN.a -Wl,--no-whole-archive
+```
+
+即后面的 `-Wl,--no-whole-archive` 也要加上
+
 #### 编译动态库的时候，链接出错 `recompile with -fPIC`
 
 错误信息如下：
