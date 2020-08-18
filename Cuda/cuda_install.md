@@ -7,7 +7,7 @@
 
 ## NVIDIA 驱动及 CUDA / CuDNN 安装
 
-NVIDIA 驱动安装
+### NVIDIA 驱动安装
 
 ```
 sudo add-apt-repository ppa:xorg-edgers/ppa
@@ -41,7 +41,22 @@ sudo apt-get update
 sudo apt-get install nvidia-430 #此处对应自己安装的的驱动版本
 ```
 
-CUDA 安装
+通过官方下载得到的 run 文件进行安装，需切换到纯命令行模式(CTRL+ALT+F1)，并执行如下命令：
+
+```
+sudo service lightdm stop 或者 sudo stop lightdm
+sudo init3
+```
+
+执行成功后，再运行 run 文件，按提示步骤安装即可
+
+```
+./NVIDIA-Linux-x86_64-450.57.run
+```
+
+注：Ubuntu 16.04 的 apt 源中最新的驱动只支持到 430，如果需要安装最新的驱动只能通过官方下载最新的驱动进行安装，例如使用上述 run 文件的安装方案。无论哪种安装方式都需要提前卸载系统中当前的驱动。
+
+### CUDA 安装
 
 下载对应版本的 cuda_8.0.61_375.26_linux.run
 
@@ -56,7 +71,7 @@ export PATH=/usr/local/cuda-8.0/bin:$PATH
 export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64
 ```
 
-CuDNN 安装
+### cuDNN 安装
 
 下载对应版本的 cudnn-8.0-linux-x64-v7.1.tgz
 
