@@ -3,6 +3,58 @@
 打印时间，可以用来做文件夹名、版本号后缀等
 
 ``` sh
+alias
+```
+
+查看 `alias` 的所有别名
+
+``` sh
+alias cp='cp -i'
+```
+
+建立一个 `cp` 别称
+
+``` sh
+unalias cp
+```
+
+清空某个别称的别名
+
+---
+
+有时候在某些环境执行 `cp aaa bbb` 时，如果已经存在同名文件，`cp` 会提示是否覆盖，这时还需要用户主动输入 `yes`，再能执行复制（覆盖），主要原因是 `cp` 被设置了别称，实际为 `cp -i`，`-i` 参数会产生这种提示效果。如果确定要以覆盖的方式进行复制，又不想手动输入 `yes`，那么可以尝试下列两种方式：
+
+去除别称：
+
+``` sh
+unalias cp
+```
+
+通过管道的方式输入 `yes`
+
+``` sh
+yes | cp filename new/filename
+```
+
+---
+
+`stat` 命令可以显示比 ls 更详细的文件信息
+
+``` sh
+stats filename
+  File: 'filename'
+  Size: 1452313   	Blocks: 2840       IO Block: 4096   regular file
+Device: 811h/2065d	Inode: 211288935   Links: 1
+Access: (0664/-rw-rw-r--)  Uid: ( 1000/     zhi)   Gid: ( 1000/     zhi)
+Access: 2020-09-05 10:40:09.013525743 +0800
+Modify: 2020-09-04 17:56:36.762256255 +0800
+Change: 2020-09-04 17:56:36.762256255 +0800
+ Birth: -
+```
+
+---
+
+``` sh
 date +%Y%m%d%k%M
 ```
 
