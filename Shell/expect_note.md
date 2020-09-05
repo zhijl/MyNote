@@ -117,6 +117,22 @@ chmod 777 remote_root_command.exp
 sleep 10
 ```
 
+## 问题记录
+
+在使用 expect 自动拉取 git 上的一个私有仓库时
+
+```
+expect: spawn id exp3 not open
+while executing
+"expect {
+"Password*" { send "${remote_pwd}\r"}
+}" 
+```
+
+原因是进程 id 结束了，但是代码还没执行完。所以加一个 spawn，一个 spawn 代表一个新的进程。
+
+上面这种解释不对，出现上面这种问题，是因为本地配置了 git 无密码登录的方式，所以在 expect 前的 git 指令在不需要输入密码的情况下执行完后，进程结束，此处的 expect 得不到进程相应的响应（进程已经结束），于是就报了这样的错。
+
 ## 参考
 
 <span id=1>1. [每次进步一点点——linux expect 使用](http://blog.csdn.net/houmou/article/details/53102051)</span>
