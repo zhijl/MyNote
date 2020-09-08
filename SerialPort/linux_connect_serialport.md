@@ -35,3 +35,15 @@ minicom 也是一个比较好的工具
 ``` sh
 minicom -s
 ```
+
+使用 `minicom` 的过程中可能会遇到这样的问题：
+
+``` text
+Device /dev/ttyUSB0 is locked.
+```
+
+原因可能是之前使用时没有完全退出 `minicom`，导致进程还在占用串口，解决方法可以尝试杀死进程，即：
+
+``` sh
+killall -9 minicom
+```
