@@ -23,6 +23,10 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -s")
 set_target_properties(TARGET_NAME PROPERTIES LINK_FLAGS_RELEASE -s)
 ```
 
+### 在 CMake 中静态链接 glibc
+
+target_link_libraries(MYLIB -static-libgcc -static-libstdc++)
+
 ### 参考
 
 https://my.oschina.net/iamhere/blog/515660
