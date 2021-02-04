@@ -10,7 +10,7 @@ Ken Thompson 的 sh 是第一种 Unix Shell，Windows Explorer 是一个典型�
 
 在 docker 容器里操作时有时候会遇到提示 y/n 的情况，这主要是系统的某个配置文件中对 cp 命令设置了别名，即 `alias cp='cp -i'`
 
-想要不提示 y/n 而直接覆盖拷贝，则执行 `alias cp=cp` 覆盖原别名设置即可
+想要不提示 y/n 而直接覆盖拷贝，则执行 `alias cp=cp` 覆盖原别名设置即可；另一种方法，直接 `/cp xxx xxx`，在命令前加 `/` 也可以实现
 
 ## 一些小工具和 trick
 
