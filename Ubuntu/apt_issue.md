@@ -2,15 +2,34 @@
 
 ### 执行 `sudo apt install` 时提示 `/var/lib/dpkg/lock`
 
+报错日志
+
+```
+root@linux:~# apt install openjdk-8-jre-headless
+E: Could not get lock /var/lib/dpkg/lock-frontend - open (11: Resource temporarily unavailable)
+E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), is another process using it?
+```
+
 分析原因:
 
 - 另一个程序正在运行，导致资源被锁不可用
 - 导致资源被锁的原因可能是上次运行安装或更新没有正常完成，解决办法就是删掉
 
 ``` shell
+# 查找并杀死s使用 apt 的进程
+ps -aux | grep apt
+kill pid
+
+lsof /var/lib/dpkg/lock
+
+
+# 其他方法
 sudo rm /var/cache/apt/archives/lock
 sudo rm /var/lib/dpkg/lock
 ```
+
+参考：How to Fix ‘E: Could not get lock /var/lib/dpkg/lock’ Error in Ubuntu Linux  https://itsfoss.com/could-not-get-lock-error/
+
 
 ### Python cv2库 import 的问题
 
