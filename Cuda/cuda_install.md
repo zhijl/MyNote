@@ -45,7 +45,7 @@ sudo apt-get install nvidia-430 #此处对应自己安装的的驱动版本
 
 ```
 sudo service lightdm stop 或者 sudo stop lightdm
-sudo init3
+sudo init 3
 ```
 
 执行成功后，再运行 run 文件，按提示步骤安装即可
@@ -55,6 +55,34 @@ sudo init3
 ```
 
 注：Ubuntu 16.04 的 apt 源中最新的驱动只支持到 430，如果需要安装最新的驱动只能通过官方下载最新的驱动进行安装，例如使用上述 run 文件的安装方案。无论哪种安装方式都需要提前卸载系统中当前的驱动。
+
+**特殊问题**
+
+```
+root@ubuntu-server# ./NVIDIA-Linux-x86_64-450.57.run 
+Verifying archive integrity... OK
+Uncompressing NVIDIA Accelerated Graphics Driver for Linux-x86_64 450.57................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Received signal SIGBUS; aborting.
+```
+
+```
+root@ubuntu-server# nvidia-installer -v
+nvidia-installer:  version 418.87.00
+  The NVIDIA Software Installer for Unix/Linux.
+
+  This program is used to install, upgrade and uninstall The NVIDIA Accelerated Graphics Driver Set for
+  Linux-x86_64.
+```
+
+在执行卸载时发生了 SIGBUS ，可通过 `strace nvidia-installer --uninstall -s` 定位程序运行到哪报的错
+
+例如在更新 460 版本的驱动时：
+
+```
+root@ubuntu-server# ./nvidia-installer --no-opengl-files --no-nouveau-check --no-x-check --no-ncurses-color > temp.log 2>&1
+```
+
+查看 temp.log 中的日志，发现是安装脚本在对 `/usr/lib/x86_64-linux-gnu/libcuda.so.418.87.00.cp` 进行 open write 时出错，直接删除该文件后，再次安装一切正常
 
 ### CUDA 安装
 
